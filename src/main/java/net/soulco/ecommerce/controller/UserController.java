@@ -1,8 +1,7 @@
 package net.soulco.ecommerce.controller;
 
-import net.soulco.ecommerce.Model.User;
-import net.soulco.ecommerce.Repo.UserRepository;
-import net.soulco.ecommerce.Service.UserService;
+import net.soulco.ecommerce.model.User;
+import net.soulco.ecommerce.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

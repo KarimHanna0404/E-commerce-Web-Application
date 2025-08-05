@@ -2,10 +2,11 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
     <changeSet id="create-user-table" author="karim hanna">
-        <createTable tableName="user" >
+        <createTable tableName="user">
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -26,4 +27,59 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="add-email-check-constraint" author="Karim Hanna">
+        <sql>
+            ALTER TABLE user
+                ADD CONSTRAINT chk_email_format
+                    CHECK (email REGEXP '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
+        </sql>
+    </changeSet>
+
+    <changeSet id="add-email-not-empty-constraint" author="Karim Hanna">
+        <sql>
+          <![CDATA[
+            ALTER TABLE user
+                ADD CONSTRAINT chk_email_not_empty
+                    CHECK (email <> '');
+            ]]>
+        </sql>
+    </changeSet>
+
+    <changeSet id="add-password-check-constraint" author="Karim Hanna">
+        <sql>
+        <![CDATA[
+            ALTER TABLE user
+                ADD CONSTRAINT chk_password_strong
+                    CHECK (
+                        password REGEXP '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&^#()_+=\\-])[A-Za-z\\d@$!%*?&^#()_+=\\-]{8,}$'
+                );
+            ]]>
+    </sql>
+    </changeSet>
+
+    <changeSet id="add-password-not-empty-constraint" author="Karim Hanna">
+        <sql>
+             <![CDATA[
+            ALTER TABLE user
+                ADD CONSTRAINT chk_password_not_empty
+                    CHECK (password <> '');
+            ]]>
+        </sql>
+    </changeSet>
+
+    <changeSet id="add-username-not-empty-constrain" author="Karim Hanna">
+        <sql>
+               <![CDATA[
+            ALTER TABLE user
+                ADD CONSTRAINT chk_username_not_empty
+                    CHECK (username <> '');
+            ]]>
+
+        </sql>
+    </changeSet>
+
+
+
+
 </databaseChangeLog>
