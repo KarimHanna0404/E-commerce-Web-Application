@@ -1,4 +1,4 @@
-package net.soulco.ecommerce.Model;
+package net.soulco.ecommerce.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,14 +19,18 @@ public class User {
     private Long id;
 
     @Column(name = "email", nullable = false, unique = true, length = 50)
-    private String Email;
+    private String email;
 
     @Column(name = "password", nullable = false, length = 50)
-    private String Password;
+    private String password;
 
-    @Column(nullable = false, length = 50)
-    private String FirstName;
+    @Column(name ="firstname", nullable = false, length = 50)
+    private String firstname;
 
-    @Column(nullable = false, length = 50)
-    private String LastName;
+    @Column(name = "lastname",nullable = false, length = 50)
+    private String lastname;
+
+    @Column(name = "username", nullable = false, length = 50)
+    private String username;
+
 }
