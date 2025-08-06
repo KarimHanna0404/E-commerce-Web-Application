@@ -24,13 +24,12 @@ public class User {
     @Column(name = "password", nullable = false, length = 50)
     private String password;
 
-    @Column(name ="firstname", nullable = false, length = 50)
+    @Column(name ="first_name", nullable = false, length = 50)
     private String firstname;
 
-    @Column(name = "lastname",nullable = false, length = 50)
+    @Column(name = "last_name",nullable = false, length = 50)
     private String lastname;
 
     @Column(name = "username", nullable = false, length = 50)
     private String username;
-
 }

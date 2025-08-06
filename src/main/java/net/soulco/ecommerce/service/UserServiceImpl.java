@@ -19,12 +19,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void register(UserDto user) {
-
-        // existsbyusername => throw new RuntimeException("Username already exists");
-
-//        if(userRepository.existsByUsername(user.getUsername())){
-//            throw new RuntimeException("Username already exists, use a username that is not taken");
-//        }
+        if(userRepository.existsByUsername(user.getUsername())){
+            throw new RuntimeException("Username already exists, use a username that is not taken");
+        }
         userRepository.save(userMapper.dtoToEntity(user));
     }
 }
