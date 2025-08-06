@@ -44,7 +44,7 @@ public class UserController {
 
     @RequestMapping(value = "/login" , method = RequestMethod.GET)
     public String showlogin (){
-         return "login";
+         return "login.component";
 
     }
 
@@ -60,7 +60,7 @@ public String login ( @RequestParam String email , @RequestParam String password
 
         else {
             map.addAttribute("error", "invalid credentials");
-            return "login" ;
+            return "login.component" ;
         }
     }
 
