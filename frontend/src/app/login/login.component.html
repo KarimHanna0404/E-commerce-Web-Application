@@ -17,7 +17,7 @@
     <p class="welcome-subtitle">Please fill the fields to sign-in to Ultima Network</p>
 
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+    <form [formGroup]="loginForm"  class="login-form">
 
       <div class="input-group">
         <div class="input-icon">
@@ -51,7 +51,7 @@
           class="form-input" />
       </div>
 
-      <button type="submit" [disabled]="loginForm.invalid" class="login-button">
+      <button  (click)="onSubmit()" [disabled]="loginForm.invalid" class="login-button">
         LOGIN
       </button>
     </form>

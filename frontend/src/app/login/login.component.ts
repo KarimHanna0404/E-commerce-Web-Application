@@ -1,37 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
-  imports:[ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
 
 
-export class LoginComponent implements OnInit {
-  loginForm!: FormGroup;
+export class LoginComponent {
+  fb = inject(FormBuilder)
+  httpClient = inject(HttpClient)
 
-  constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {
-    this.loginForm = this.fb.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required]
-    });
-  }
+  loginForm: FormGroup = this.fb.group({
+    username: ['', Validators.required],
+    password: ['', Validators.required]
+  });
 
   onSubmit(): void {
+    console.log("login form", this.loginForm.value)
     if (this.loginForm.valid) {
-      const { username, password } = this.loginForm.value;
-      console.log('Login Data:', username, password);
-
-      if (username === 'admin' && password === 'admin') {
-        alert('Login successful!');
-      } else {
-        alert('Invalid credentials');
-      }
+      this.httpClient.post('api/user/login', this.loginForm.value).subscribe({
+        next: (Response) => {
+          console.log('login successful :', Response);
+        },
+        error: (error) => {
+          console.error('Login failed:', error);
+        }
+      })
     }
   }
 }
