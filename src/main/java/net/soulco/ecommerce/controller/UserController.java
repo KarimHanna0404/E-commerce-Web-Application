@@ -1,5 +1,6 @@
 package net.soulco.ecommerce.controller;
 
+import net.soulco.ecommerce.dto.UserDto;
 import net.soulco.ecommerce.model.User;
 import net.soulco.ecommerce.repo.UserRepository;
 import net.soulco.ecommerce.service.UserService;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 // service
 // |
 // repo
+
+// DTO Pattern (why??)
+// mapping => mapstruct
 
 
 @RestController
@@ -32,7 +36,7 @@ public class UserController {
     }
 
     @PostMapping("register")
-    public String registerUser(@RequestBody User user) {
+    public String registerUser(@RequestBody UserDto user) {
         userService.register(user);
         return "User registered successfully!";
     }

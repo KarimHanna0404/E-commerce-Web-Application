@@ -1,10 +1,10 @@
 package net.soulco.ecommerce.service;
 
-import net.soulco.ecommerce.model.User;
-import org.springframework.web.bind.annotation.RequestParam;
+import net.soulco.ecommerce.dto.UserDto;
 
 public interface UserService {
 
-    void register(User user);
-    Boolean auth ( String email, String password);
+    void register(UserDto user);
+
+     Boolean auth ( String email, String password);
 }

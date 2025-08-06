@@ -1,11 +1,36 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
 
+
+export class LoginComponent {
+  fb = inject(FormBuilder)
+  httpClient = inject(HttpClient)
+
+  loginForm: FormGroup = this.fb.group({
+    username: ['', Validators.required],
+    password: ['', Validators.required]
+  });
+
+  onSubmit(): void {
+    console.log("login form", this.loginForm.value)
+    if (this.loginForm.valid) {
+      this.httpClient.post('api/user/login', this.loginForm.value).subscribe({
+        next: (Response) => {
+          console.log('login successful :', Response);
+        },
+        error: (error) => {
+          console.error('Login failed:', error);
+        }
+      })
+    }
+  }
 }

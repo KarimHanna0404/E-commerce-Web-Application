@@ -1,5 +1,7 @@
 package net.soulco.ecommerce.service;
 
+import net.soulco.ecommerce.dto.UserDto;
+import net.soulco.ecommerce.mapper.UserMapper;
 import net.soulco.ecommerce.model.User;
 import net.soulco.ecommerce.repo.UserRepository;
 import org.springframework.stereotype.Service;
@@ -13,19 +15,19 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     @Override
-    public void register(User user) {
-        // existsbyusername => throw new RuntimeException("Username already exists");
-
+    public void register(UserDto user) {
         if(userRepository.existsByUsername(user.getUsername())){
             throw new RuntimeException("Username already exists, use a username that is not taken");
         }
-        userRepository.save(user);
+        userRepository.save(userMapper.dtoToEntity(user));
     }
 
     public Boolean auth ( String email, String password){
