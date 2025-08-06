@@ -1,8 +1,8 @@
 package net.soulco.ecommerce.service;
 
-import net.soulco.ecommerce.model.User;
+import net.soulco.ecommerce.dto.UserDto;
 
 public interface UserService {
 
-    void register(User user);
+    void register(UserDto user);
 }
