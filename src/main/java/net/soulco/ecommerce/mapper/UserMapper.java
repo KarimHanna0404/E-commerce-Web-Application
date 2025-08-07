@@ -1,5 +1,6 @@
 package net.soulco.ecommerce.mapper;
 
+import net.soulco.ecommerce.dto.LoginDto;
 import net.soulco.ecommerce.dto.UserDto;
 import net.soulco.ecommerce.model.User;
 import org.mapstruct.Mapper;
@@ -17,4 +18,5 @@ public interface UserMapper {
     UserDto entityToDto(User user);
 
     User dtoToEntity(UserDto user);
+
 }
