@@ -22,6 +22,13 @@ export class LoginComponent {
 
   onSubmit(): void {
     console.log("login form", this.loginForm.value)
+
+
+  if (!this.loginForm.value.username || !this.loginForm.value.password) {
+    alert("Username or password is empty. Request not sent.");
+    return;
+  }
+
     if (this.loginForm.valid) {
       this.httpClient.post('api/user/login', this.loginForm.value).subscribe({
         next: (Response) => {
