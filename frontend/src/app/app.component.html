@@ -1,5 +1,7 @@
-<p-menubar [model]="model"/>
-<!-- <app-login></app-login> -->
-<app-registration></app-registration>
+<p-menubar [model]="model"></p-menubar>
 
-<router-outlet/>
+<nav>
+  <a routerLink="/login">Login</a>
+  <a routerLink="/registration">Register</a>
+</nav>
+<router-outlet></router-outlet>
