@@ -2,8 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { first } from 'rxjs';
-
+import { RouterModule } from '@angular/router';
 //checking if password matches with confirmPassword
 function matchPasswords(group: AbstractControl): ValidationErrors | null {
   const pwd = group.get('password')?.value;
@@ -13,7 +12,7 @@ function matchPasswords(group: AbstractControl): ValidationErrors | null {
 
 @Component({
   selector: 'app-registration',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,RouterModule],
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss']
 })
@@ -44,11 +43,16 @@ export class RegistrationComponent {
     };
 
 
-    this.http.post('http://localhost:8080/api/user/register', payload).subscribe({
-      next: (res) => {
-        console.log('registration successful:', res);
-        alert('Registered successfully!');
-      },
-    });
+this.http.post('http://localhost:8080/api/user/register', payload, { responseType: 'text' })
+  .subscribe({
+    next: (res) => {
+      console.log('registration successful:', res);
+      alert(res);
+    },
+    error: (err) => {
+      console.error('Registered failed:', err);
+      alert('Registered failed!');
+    }
+  });
   }
 }

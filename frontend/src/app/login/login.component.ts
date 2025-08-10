@@ -33,11 +33,13 @@ export class LoginComponent {
 
     if (this.loginForm.valid) {
       this.httpClient.post('http://localhost:8080/api/user/login', this.loginForm.value).subscribe({
-        next: (Response) => {
-          console.log('login successful :', Response);
+        next: (res) => {
+          console.log('login successful :', res);
+          alert('login successful');
         },
-        error: (error) => {
-          console.error('Login failed:', error);
+        error: (err) => {
+          console.error('Login failed:', err);
+                    alert('login failed');
         }
       })
     }
