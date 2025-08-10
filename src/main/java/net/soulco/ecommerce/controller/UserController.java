@@ -9,18 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-// controller
-// |
-// service
-// |
-// repo
-
-// DTO Pattern (why??)
-// mapping => mapstruct
-
-
+// If you're developing with Angular on :4200, keep this or use your global WebConfig CORS.
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping(value = "api/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
@@ -29,28 +21,40 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("register")
-    public String registerUser(@Valid @RequestBody UserDto user) {
+    public record ApiMessage(String message) {}
+
+    @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<ApiMessage> registerUser(@Valid @RequestBody UserDto user) {
         userService.register(user);
-        return "User registered successfully!";
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new ApiMessage("User registered successfully!"));
     }
 
-
-
-
-    @PostMapping(value = "/login")
-    public Boolean login(@Valid @RequestBody LoginDto login) {
-        return userService.auth(login);
+    @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginDto login, HttpSession session) {
+        boolean ok = userService.auth(login);
+        if (ok) {
+            return ResponseEntity.ok(new ApiMessage("Login successful"));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ApiMessage("Invalid email or password"));
     }
 
-    //function to test session
-    @GetMapping("/session")
-  public UserDto showUserDetails (HttpSession session){return userService.showSession(session);}
+    @GetMapping(value = "/session", produces = "application/json")
+    public ResponseEntity<?> showUserDetails(HttpSession session) {
+        UserDto dto = userService.showSession(session);
+        if (dto == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ApiMessage("No active session"));
+        }
+        return ResponseEntity.ok(dto);
+    }
 
-    @PostMapping(value="/logout")
-    public String logout(){ return userService.DeleteSession();}
-
-
-
-
+    @PostMapping(value = "/logout", produces = "application/json")
+    public ResponseEntity<ApiMessage> logout() {
+        userService.DeleteSession();
+        // 204 is also fine; using 200 + message for clarity
+        return ResponseEntity.ok(new ApiMessage("Logged out"));
+    }
 }
