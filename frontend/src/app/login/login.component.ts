@@ -32,7 +32,7 @@ export class LoginComponent {
   }
 
     if (this.loginForm.valid) {
-      this.httpClient.post('api/user/login', this.loginForm.value).subscribe({
+      this.httpClient.post('http://localhost:8080/api/user/login', this.loginForm.value).subscribe({
         next: (Response) => {
           console.log('login successful :', Response);
         },
