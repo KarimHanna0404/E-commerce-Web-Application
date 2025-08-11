@@ -4,6 +4,7 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { routes } from '../app.routes';
+import { catchError, throttleTime, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -24,6 +25,7 @@ export class LoginComponent {
 
   onSubmit(): void {
     console.log("login form", this.loginForm.value)
+    this.errorMessage = null;
 
 
   if (!this.loginForm.value.username || !this.loginForm.value.password) {
@@ -32,7 +34,13 @@ export class LoginComponent {
   }
 
     if (this.loginForm.valid) {
-      this.httpClient.post('http://localhost:8080/api/user/login', this.loginForm.value).subscribe({
+      this.httpClient.post('http://localhost:8080/api/user/login', this.loginForm.value).pipe(
+        catchError(error => {
+          this.errormessage = error.error?.Message || 'failed login';
+          return throwError(() => Error)};
+        )
+      
+    ).subscribe({
         next: (res) => {
           console.log('login successful :', res);
           alert('login successful');
