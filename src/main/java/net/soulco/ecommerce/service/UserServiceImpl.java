@@ -32,9 +32,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    //.map was replaced with .filter because .map transforms Optional<user> to Optional<Boolean> because
-    // it only wants to check if the password matches and if it does not then it triggers the else but .filter keeps Optional<user> so if the username && password match user
-    // is kept but if not the Optional becomes empty which triggers the elseThrow
     public Boolean auth(LoginDto loginDto) {
         User user = userRepository.findByUsername(loginDto.getUsername())
                 .filter(u -> u.getPassword().equals(loginDto.getPassword()))

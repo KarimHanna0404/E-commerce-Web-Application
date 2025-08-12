@@ -5,10 +5,7 @@ import net.soulco.ecommerce.dto.ProductDto;
 import net.soulco.ecommerce.model.Product;
 import net.soulco.ecommerce.repo.ProductRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -18,40 +15,40 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
 
     @Override
-    public ProductDto create(String name, String description, String price, String code, MultipartFile image) {
-        try {
-            Product product = new Product();
-            product.setName(name);
-            product.setDescription(description);
-            product.setPrice(new BigDecimal(price));
-            product.setCode(code);
-            product.setImage(image.getBytes());
-
-            Product savedProduct = productRepository.save(product);
-
-            return mapToDto(savedProduct);
-        } catch (IOException e) {
-            throw new RuntimeException("Error processing image file", e);
-        }
+    public Product createProduct(ProductDto dto) {
+        Product product = new Product();
+        product.setName(dto.getName());
+        product.setPrice(dto.getPrice());
+        product.setCode(dto.getCode());
+        product.setDescription(dto.getDescription());
+        product.setImageUrl(dto.getImageUrl());
+        return productRepository.save(product);
     }
 
     @Override
-    public List<ProductDto> findAll() {
-        return List.of();
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
     }
 
     @Override
-    public ProductDto findbyId(Long id) {
-        return null;
+    public Product getProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
     @Override
-    public ProductDto update(String name, String Description, String price, String code, MultipartFile image) {
-        return null;
+    public Product updateProduct(Long id, ProductDto dto) {
+        Product product = getProductById(id);
+        product.setName(dto.getName());
+        product.setPrice(dto.getPrice());
+        product.setCode(dto.getCode());
+        product.setDescription(dto.getDescription());
+        product.setImageUrl(dto.getImageUrl());
+        return productRepository.save(product);
     }
 
     @Override
-    public void delete(Long id) {
-
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id);
     }
 }

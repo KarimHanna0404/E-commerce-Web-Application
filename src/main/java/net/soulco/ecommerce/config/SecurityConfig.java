@@ -13,10 +13,11 @@ public class SecurityConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:4200")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
-                        .allowedHeaders("*");
+                registry.addMapping("/api/**") // only API endpoints
+                        .allowedOrigins("http://localhost:4200") // Angular frontend
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // allow all needed methods
+                        .allowedHeaders("*") // allow all headers
+                        .allowCredentials(true); // allow cookies/auth headers
             }
         };
     }

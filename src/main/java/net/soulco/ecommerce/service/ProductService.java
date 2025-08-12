@@ -1,21 +1,19 @@
 package net.soulco.ecommerce.service;
 
 import net.soulco.ecommerce.dto.ProductDto;
-import org.springframework.web.multipart.MultipartFile;
+import net.soulco.ecommerce.model.Product;
 
 import java.util.List;
 
 public interface ProductService {
 
-   ProductDto create(String name, String Description, String price, String code, MultipartFile image);
+    Product createProduct(ProductDto dto);
 
-   List<ProductDto> findAll();
+    List<Product> getAllProducts();
 
-   ProductDto findbyId(Long id);
+    Product getProductById(Long id);
 
-   ProductDto update(String name, String Description, String price, String code, MultipartFile image);
+    Product updateProduct(Long id, ProductDto dto);
 
-   void delete(Long id);
-
-
+    void deleteProduct(Long id);
 }
