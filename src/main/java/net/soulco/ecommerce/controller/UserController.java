@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-// If you're developing with Angular on :4200, keep this or use your global WebConfig CORS.
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/user")
