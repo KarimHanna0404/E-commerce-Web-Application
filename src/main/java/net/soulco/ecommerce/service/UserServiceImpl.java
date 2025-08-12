@@ -52,7 +52,6 @@ UserDto userDto=userMapper.entityToDto(user);
             return userDto;
         else
             throw new RuntimeException("user not found");
-
     }
 public String DeleteSession(){
     if(session.getAttribute("userData")!=null) {
