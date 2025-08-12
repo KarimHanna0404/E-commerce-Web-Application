@@ -26,7 +26,6 @@ export class RegistrationComponent {
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     confirmPassword: ['', Validators.required],
-    username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
   }, { validators: matchPasswords });
 
   onSubmit() {
@@ -35,16 +34,13 @@ export class RegistrationComponent {
       return;
     }
     const payload = {
-      firstname: this.registrationForm.value.first_name,
-      lastname:  this.registrationForm.value.last_name,
-      username: this.registrationForm.value.username, 
-      email:     this.registrationForm.value.email,
-      password:  this.registrationForm.value.password
-   
+      name: `${this.registrationForm.value.first_name} ${this.registrationForm.value.last_name}`,
+      email: this.registrationForm.value.email,
+      password: this.registrationForm.value.password
     };
 
 
-    this.http.post('http://localhost:8080/api/user/register', payload).subscribe({
+    this.http.post('/api/user/register', payload).subscribe({
       next: (res) => {
         console.log('registration successful:', res);
         alert('Registered successfully!');

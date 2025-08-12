@@ -1,45 +1,45 @@
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { Component, inject } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { routes } from '../app.routes';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterModule],
+  imports: [ReactiveFormsModule,RouterModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
+
+
 export class LoginComponent {
-  private fb = inject(FormBuilder);
-  private http = inject(HttpClient);
+  fb = inject(FormBuilder)
+  httpClient = inject(HttpClient)
 
   loginForm: FormGroup = this.fb.group({
-    username: ['', [Validators.required]],   
-    password: ['', [Validators.required]]
+    username: ['', Validators.required],
+    password: ['', Validators.required]
   });
 
   onSubmit(): void {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-      return;
+    console.log("login form", this.loginForm.value)
+
+
+  if (!this.loginForm.value.username || !this.loginForm.value.password) {
+    alert("Username or password is empty. Request not sent.");
+    return;
+  }
+
+    if (this.loginForm.valid) {
+      this.httpClient.post('api/user/login', this.loginForm.value).subscribe({
+        next: (Response) => {
+          console.log('login successful :', Response);
+        },
+        error: (error) => {
+          console.error('Login failed:', error);
+        }
+      })
     }
-
-    const payload = {
-      email: this.loginForm.value.username,
-      password: this.loginForm.value.password
-    };
-
-    this.http.post('http://localhost:8080/api/user/login', payload, {
-      headers: { 'Content-Type': 'application/json' },
-      withCredentials: true
-    }).subscribe({
-      next: (res) => {
-        console.log('Login successful:', res);
-        alert('Login successful!');
-      },
-      error: (err) => {
-        console.error('Login failed:', err);
-      }
-    });
   }
 }
