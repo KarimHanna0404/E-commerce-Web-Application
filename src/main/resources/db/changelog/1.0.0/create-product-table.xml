@@ -1,25 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="
-           http://www.liquibase.org/xml/ns/dbchangelog
-           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
-    <changeSet id="1-create-product-table" author="yourname">
-        <createTable tableName="product">
+    <changeSet id="1-create-products-table" author="malak">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="products"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="products" remarks="Stores product information">
             <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true" primaryKeyName="pk_products" nullable="false"/>
             </column>
-            <column name="name" type="VARCHAR(255)"/>
-            <column name="price" type="DECIMAL(10,2)"/>
-            <column name="code" type="VARCHAR(100)"/>
-            <column name="description" type="TEXT"/>
-            <column name="image_url" type="VARCHAR(500)"/>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code" type="VARCHAR(100)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uk_products_code"/>
+            </column>
+            <column name="description" type="TEXT" remarks="Detailed product description"/>
+            <column name="image_url" type="VARCHAR(500)" remarks="URL to product image"/>
             <column name="user_id" type="BIGINT">
-                <constraints nullable="true" foreignKeyName="fk_product_user" references="user(id)"/>
+                <constraints nullable="false"/>
             </column>
         </createTable>
-    </changeSet>
 
+        <addForeignKeyConstraint
+                baseTableName="products"
+                baseColumnNames="user_id"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                constraintName="fk_products_user"
+                onDelete="CASCADE"/>
+
+        <createIndex tableName="products" indexName="idx_products_user_id">
+            <column name="user_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

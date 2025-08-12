@@ -6,7 +6,7 @@
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
     <changeSet id="1-create-product-table" author="you">
-        <createTable tableName="product">
+        <createTable tableName="products">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -28,10 +28,15 @@
 
         <!-- Add foreign key constraint -->
         <addForeignKeyConstraint
-                baseTableName="product"
+                baseTableName="products"
                 baseColumnNames="user_id"
-                referencedTableName="user"
+                referencedTableName="users"
                 referencedColumnNames="id"
-                constraintName="fk_product_user"/>
+                constraintName="fk_products_user"/>
+
+        <!-- Optional: Add index for faster lookups -->
+        <createIndex indexName="idx_product_user_id" tableName="products">
+            <column name="user_id"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>
