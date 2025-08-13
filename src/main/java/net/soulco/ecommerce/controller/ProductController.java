@@ -1,7 +1,9 @@
 package net.soulco.ecommerce.controller;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import net.soulco.ecommerce.dto.ProductDto;
+import net.soulco.ecommerce.dto.UserDto;
 import net.soulco.ecommerce.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +17,14 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ProductDto createProduct(@RequestBody ProductDto dto) {
-        return productService.createProduct(dto);
+    public ProductDto createProduct(@RequestBody ProductDto dto, HttpSession session) {
+        UserDto loggedUser = (UserDto) session.getAttribute("userData");
+
+        if (loggedUser == null) {
+            throw new RuntimeException("You must be logged in to add a product");
+        }
+
+        return productService.createProduct(dto,loggedUser);
     }
 
     @GetMapping

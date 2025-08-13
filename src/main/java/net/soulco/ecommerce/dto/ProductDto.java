@@ -29,5 +29,16 @@ public class ProductDto {
     @NotBlank(message = "Code is required")
     @Pattern(regexp = "^[A-Za-z0-9]+$", message = "Code must contain only letters and digits")
     private String code;
+
+    @Override
+    public String toString() {
+        return "ProductDto{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", price=" + price +
+                ", code='" + code + '\'' +
+                '}';
+    }
 }
 

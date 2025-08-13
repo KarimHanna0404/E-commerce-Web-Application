@@ -22,7 +22,7 @@ public class Product {
 
     private String name;
 
-    @Column(precision = 10, scale = 2) // price format like 99999999.99
+    @Column(precision = 10, scale = 2)
     private BigDecimal price;
 
     private String code;
