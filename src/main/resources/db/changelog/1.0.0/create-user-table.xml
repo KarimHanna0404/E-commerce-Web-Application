@@ -3,40 +3,83 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
-    <changeSet id="1-create-product-table" author="you">
-        <createTable tableName="products">
-            <column name="id" type="BIGINT" autoIncrement="true">
+    <changeSet id="create-user-table" author="karim hanna">
+        <createTable tableName="user">
+            <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="VARCHAR(255)">
+            <column name="first_name" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
-            <column name="code" type="VARCHAR(100)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="price" type="DECIMAL(10,2)">
+            <column name="last_name" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="TEXT"/>
-            <column name="image_url" type="VARCHAR(500)"/>
-            <column name="user_id" type="BIGINT">
+            <column name="username" type="VARCHAR(64)">
+                <constraints unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-
-        <!-- Add foreign key constraint -->
-        <addForeignKeyConstraint
-                baseTableName="products"
-                baseColumnNames="user_id"
-                referencedTableName="users"
-                referencedColumnNames="id"
-                constraintName="fk_products_user"/>
-
-        <!-- Optional: Add index for faster lookups -->
-        <createIndex indexName="idx_product_user_id" tableName="products">
-            <column name="user_id"/>
-        </createIndex>
     </changeSet>
+
+    <changeSet id="add-email-check-constraint" author="Karim Hanna">
+        <sql>
+            ALTER TABLE user
+                ADD CONSTRAINT chk_email_format
+                    CHECK (email REGEXP '^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$');
+        </sql>
+    </changeSet>
+
+    <changeSet id="add-email-not-empty-constraint" author="Karim Hanna">
+        <sql>
+          <![CDATA[
+            ALTER TABLE user
+                ADD CONSTRAINT chk_email_not_empty
+                    CHECK (email <> '');
+            ]]>
+        </sql>
+    </changeSet>
+
+    <changeSet id="add-password-check-constraint" author="Karim Hanna">
+        <sql>
+        <![CDATA[
+            ALTER TABLE user
+                ADD CONSTRAINT chk_password_strong
+                    CHECK (
+                        password REGEXP '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&^#()_+=\\-])[A-Za-z\\d@$!%*?&^#()_+=\\-]{8,}$'
+                );
+            ]]>
+    </sql>
+    </changeSet>
+
+    <changeSet id="add-password-not-empty-constraint" author="Karim Hanna">
+        <sql>
+             <![CDATA[
+            ALTER TABLE user
+                ADD CONSTRAINT chk_password_not_empty
+                    CHECK (password <> '');
+            ]]>
+        </sql>
+    </changeSet>
+
+    <changeSet id="add-username-not-empty-constrain" author="Karim Hanna">
+        <sql>
+               <![CDATA[
+            ALTER TABLE user
+                ADD CONSTRAINT chk_username_not_empty
+                    CHECK (username <> '');
+            ]]>
+
+        </sql>
+    </changeSet>
+
+
+
+
 </databaseChangeLog>

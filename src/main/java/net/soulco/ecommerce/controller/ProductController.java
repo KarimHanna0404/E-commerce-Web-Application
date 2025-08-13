@@ -2,7 +2,6 @@ package net.soulco.ecommerce.controller;
 
 import lombok.RequiredArgsConstructor;
 import net.soulco.ecommerce.dto.ProductDto;
-import net.soulco.ecommerce.model.Product;
 import net.soulco.ecommerce.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,22 +15,22 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public Product createProduct(@RequestBody ProductDto dto) {
+    public ProductDto createProduct(@RequestBody ProductDto dto) {
         return productService.createProduct(dto);
     }
 
     @GetMapping
-    public List<Product> getAllProducts() {
+    public List<ProductDto> getAllProducts() {
         return productService.getAllProducts();
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
+    public ProductDto getProductById(@PathVariable Long id) {
         return productService.getProductById(id);
     }
 
     @PutMapping("/{id}")
-    public Product updateProduct(@PathVariable Long id, @RequestBody ProductDto dto) {
+    public ProductDto updateProduct(@PathVariable Long id, @RequestBody ProductDto dto) {
         return productService.updateProduct(id, dto);
     }
 
