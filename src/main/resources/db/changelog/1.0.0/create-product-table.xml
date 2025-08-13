@@ -43,4 +43,44 @@
             <column name="user_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="add-product-name-check-constraint" author="Karim Hanna">
+        <sql>
+            ALTER TABLE product
+                ADD CONSTRAINT chk_product_name_not_empty
+                    CHECK (CHAR_LENGTH(name) &gt; 0);
+        </sql>
+    </changeSet>
+
+    <changeSet id="product-price-is-positive" author="Karim Hanna">
+        <sql>
+            ALTER TABLE product
+                ADD CONSTRAINT chk_product_price_positive
+                    CHECK (price &gt; 0);
+        </sql>
+    </changeSet>
+
+
+    <!--caps description to maximum 1000 characters-->
+    <changeSet id="product-description-max-1000" author="karim">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="products" columnName="description"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE products MODIFY COLUMN description VARCHAR(1000);
+        </sql>
+    </changeSet>
+
+
+
+    <!-- checks if the product table exists or not-->
+    <changeSet id="product-table-precheck" author="karim" context="prod,dev">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="products"/>
+        </preConditions>
+        <sql>SELECT 1</sql>
+    </changeSet>
+
+
+
 </databaseChangeLog>

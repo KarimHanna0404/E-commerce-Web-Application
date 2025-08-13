@@ -41,7 +41,7 @@
           <![CDATA[
             ALTER TABLE user
                 ADD CONSTRAINT chk_email_not_empty
-                    CHECK (email <> '');
+                     CHECK (email <> '');
             ]]>
         </sql>
     </changeSet>
