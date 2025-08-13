@@ -1,0 +1,23 @@
+.container {
+  max-width: 600px;
+}
+
+.alert {
+  margin-bottom: 20px;
+}
+
+.form-control.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  display: none;
+}
+
+.form-control.is-invalid ~ .invalid-feedback {
+  display: block;
+}
+
+textarea {
+  resize: vertical;
+}
