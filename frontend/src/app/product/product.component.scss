@@ -9,9 +9,15 @@
 .form-control.is-invalid {
   border-color: #dc3545;
 }
+.form-label{
+  font-weight: bold;
+  color:red
+}
 
 .invalid-feedback {
+   
   display: none;
+  color:red,
 }
 
 .form-control.is-invalid ~ .invalid-feedback {

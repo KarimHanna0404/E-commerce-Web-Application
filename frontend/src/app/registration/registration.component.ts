@@ -41,11 +41,11 @@ export class RegistrationComponent {
 
 
     this.http.post('/api/user/register', payload).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         console.log('registration successful:', res);
         alert('Registered successfully!');
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('registration failed:', err);
         alert('Registration failed. Check console for details.');
       }

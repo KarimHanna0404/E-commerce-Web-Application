@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common'; // For *ngIf, *ngFor
+import { ReactiveFormsModule } from '@angular/forms'; // For formGroup, formControlName
+
+
 
 interface Product {
   id: number;
@@ -14,8 +18,15 @@ interface Product {
 
 @Component({
   selector: 'app-create-product',
-  templateUrl: './create-product.component.html',
-  styleUrls: ['./create-product.component.css']
+standalone: true, 
+   imports: [
+    CommonModule, 
+    ReactiveFormsModule,
+   
+     
+  ],
+templateUrl: './product.component.html',
+  styleUrls: ['./product.component.scss']
 })
 export class CreateProductComponent implements OnInit {
   productForm: FormGroup;
@@ -54,6 +65,7 @@ export class CreateProductComponent implements OnInit {
 
   async onSubmit(): Promise<void> {
     if (this.productForm.invalid) {
+       this.productForm.markAllAsTouched();
       this.errorMessage = 'Please fill all required fields correctly.';
       return;
     }
@@ -78,7 +90,9 @@ export class CreateProductComponent implements OnInit {
       this.successMessage = 'Product created successfully!';
       this.errorMessage = null;
       this.productForm.reset();
+      if(response){
       this.products.push(response); 
+      }
     } catch (error: any) {
       this.errorMessage = error.error?.message || 'Error creating product.';
       this.successMessage = null;
@@ -93,8 +107,8 @@ export class CreateProductComponent implements OnInit {
 
   private async checkCodeUniqueness(code: string): Promise<boolean> {
     try {
-      const response = await this.http.get<{ exists: boolean }>(/api/products/check-code?code=${code}).toPromise();
-      return response.exists;
+      const response = await this.http.get<{ exists: boolean }>(`/api/products/check-code?code=${code}`).toPromise();
+      return response? response.exists:false;
     } catch {
       return false;
     }
@@ -102,7 +116,7 @@ export class CreateProductComponent implements OnInit {
 
   private loadProducts(): void {
     this.http.get<Product[]>('/api/products').subscribe({
-      next: (products) => this.products = products,
+      next: (products:any) => this.products = products,
       error: () => this.errorMessage = 'Error loading products.'
     });
   }

@@ -1,0 +1,51 @@
+<div class="container">
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+
+    <div class="form-group">
+      <label for="name">Product Name</label>
+      <input id="name" formControlName="name" class="form-control"
+             [class.is-invalid]="productForm.get('name')?.invalid && productForm.get('name')?.touched">
+      <div class="invalid-feedback" *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched">
+        *name required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="image">Image</label>
+      <input id="image" type="file" formControlName="image" class="form-control"
+             [class.is-invalid]="productForm.get('image')?.invalid && productForm.get('image')?.touched">
+      <div class="invalid-feedback" *ngIf="productForm.get('image')?.invalid && productForm.get('image')?.touched">
+        *image url required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" formControlName="description" class="form-control"
+                [class.is-invalid]="productForm.get('description')?.invalid && productForm.get('description')?.touched"></textarea>
+      <div class="invalid-feedback" *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched">
+        *description must be 1000 characters maximum
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="price">Price</label>
+      <input id="price" type="number" formControlName="price" class="form-control"
+             [class.is-invalid]="productForm.get('price')?.invalid && productForm.get('price')?.touched">
+      <div class="invalid-feedback" *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched">
+        *price required
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="code">Code</label>
+      <input id="code" type="text" formControlName="code" class="form-control"
+             [class.is-invalid]="productForm.get('code')?.invalid && productForm.get('code')?.touched">
+      <div class="invalid-feedback" *ngIf="productForm.get('code')?.invalid && productForm.get('code')?.touched">
+        *code required
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+</div>
