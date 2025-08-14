@@ -1,27 +1,23 @@
 import { HttpClient } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router'; // Added Router import
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { catchError, throwError } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { routes } from '../app.routes';
 
 @Component({
   selector: 'app-login',
-   standalone: true, // Explicitly mark as standalone
-  imports: [CommonModule, ReactiveFormsModule,RouterModule],
+  imports: [ReactiveFormsModule, RouterModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-
-
-
 export class LoginComponent {
-  fb = inject(FormBuilder)
-  httpClient = inject(HttpClient)
+  fb = inject(FormBuilder);
+  httpClient = inject(HttpClient);
+  router = inject(Router);
 
-   loginError?: string; // Added missing property
-
+  loginError: string | null = null;
 
   loginForm: FormGroup = this.fb.group({
     username: ['', Validators.required],
@@ -29,23 +25,24 @@ export class LoginComponent {
   });
 
   onSubmit(): void {
-    console.log("login form", this.loginForm.value)
-
-
-  if (!this.loginForm.value.username || !this.loginForm.value.password) {
-    alert("Username or password is empty. Request not sent.");
-    return;
-  }
+    console.log("Login form data:", this.loginForm.value);
+    this.loginError = null;
 
     if (this.loginForm.valid) {
-      this.httpClient.post('api/user/login', this.loginForm.value).subscribe({
-        next: (Response: any) => {
-          console.log('login successful :', Response);
+      this.httpClient.post('http://localhost:8080/api/user/login', this.loginForm.value).pipe(
+        catchError(error => {
+          this.loginError = error.error?.Message || 'Failed login';
+          return throwError(() => error);
+        })
+      ).subscribe({
+        next: (res) => {
+          console.log('Login successful:', res);
+          this.router.navigate(['products']);
         },
-        error: (error: any) => {
-          console.error('Login failed:', error);
+        error: (err) => {
+          console.error('Login failed:', err);
         }
-      })
+      });
     }
   }
 }

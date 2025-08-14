@@ -28,6 +28,7 @@ standalone: true,
 templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss']
 })
+
 export class CreateProductComponent implements OnInit {
   productForm: FormGroup;
   successMessage: string | null = null;
@@ -65,7 +66,7 @@ export class CreateProductComponent implements OnInit {
 
   async onSubmit(): Promise<void> {
     if (this.productForm.invalid) {
-       this.productForm.markAllAsTouched();
+      this.productForm.markAllAsTouched();
       this.errorMessage = 'Please fill all required fields correctly.';
       return;
     }
