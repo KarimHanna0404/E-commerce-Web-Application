@@ -1,6 +1,7 @@
 package net.soulco.ecommerce.controller;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.soulco.ecommerce.dto.ProductDto;
 import net.soulco.ecommerce.dto.UserDto;
@@ -17,14 +18,12 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
-    public ProductDto createProduct(@RequestBody ProductDto dto, HttpSession session) {
+    public ProductDto createProduct(@RequestBody @Valid ProductDto dto, HttpSession session) {
         UserDto loggedUser = (UserDto) session.getAttribute("userData");
-
         if (loggedUser == null) {
             throw new RuntimeException("You must be logged in to add a product");
         }
-
-        return productService.createProduct(dto,loggedUser);
+        return productService.createProduct(dto, loggedUser);
     }
 
     @GetMapping
@@ -47,3 +46,9 @@ public class ProductController {
         productService.deleteProduct(id);
     }
 }
+
+
+// NOTES
+// LIQUIBASE => ORDER OF EXECUTION, NOT NEEDED EMPTY CHECKS, FOREIGN KEY WRONG TABLE NAME AND TYPES
+// HIBERNATE => ENABLING HIBERNATE DDL
+// PRODUCT => FORGETTING @Valid IN CREATE METHOD, SOME TODOS IN SERVICE

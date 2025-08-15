@@ -26,21 +26,35 @@
             </column>
             <column name="description" type="TEXT" remarks="Detailed product description"/>
             <column name="image_url" type="VARCHAR(500)" remarks="URL to product image"/>
-            <column name="user_id" type="BIGINT">
+            <column name="user_id" type="int">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-
-        <addForeignKeyConstraint
-                baseTableName="products"
-                baseColumnNames="user_id"
-                referencedTableName="users"
-                referencedColumnNames="id"
-                constraintName="fk_products_user"
-                onDelete="CASCADE"/>
-
-        <createIndex tableName="products" indexName="idx_products_user_id">
-            <column name="user_id"/>
-        </createIndex>
     </changeSet>
+
+    <changeSet id="add-user-foreign-key-in-products" author="meladhanna">
+        <addForeignKeyConstraint constraintName="fk_products_user"
+                                 baseTableName="products"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="product-description-max-1000" author="karim">
+        <preConditions onFail="MARK_RAN">
+            <columnExists tableName="products" columnName="description"/>
+        </preConditions>
+        <sql>
+            ALTER TABLE products MODIFY COLUMN description VARCHAR (1000);
+        </sql>
+    </changeSet>
+
+    <changeSet id="product-price-is-positive" author="Karim Hanna">
+        <sql>
+            ALTER TABLE products
+                ADD CONSTRAINT chk_product_price_positive
+                    CHECK (price &gt; 0);
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

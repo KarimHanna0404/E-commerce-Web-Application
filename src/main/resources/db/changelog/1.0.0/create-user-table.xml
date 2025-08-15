@@ -36,16 +36,6 @@
         </sql>
     </changeSet>
 
-    <changeSet id="add-email-not-empty-constraint" author="Karim Hanna">
-        <sql>
-          <![CDATA[
-            ALTER TABLE user
-                ADD CONSTRAINT chk_email_not_empty
-                     CHECK (email <> '');
-            ]]>
-        </sql>
-    </changeSet>
-
     <changeSet id="add-password-check-constraint" author="Karim Hanna">
         <sql>
         <![CDATA[
@@ -56,52 +46,6 @@
                 );
             ]]>
     </sql>
-    </changeSet>
-
-    <changeSet id="add-password-not-empty-constraint" author="Karim Hanna">
-        <sql>
-             <![CDATA[
-            ALTER TABLE user
-                ADD CONSTRAINT chk_password_not_empty
-                    CHECK (password <> '');
-            ]]>
-        </sql>
-    </changeSet>
-
-    <changeSet id="add-username-not-empty-constrain" author="Karim Hanna">
-        <sql>
-               <![CDATA[
-            ALTER TABLE user
-                ADD CONSTRAINT chk_username_not_empty
-                    CHECK (username <> '');
-            ]]>
-
-        </sql>
-    </changeSet>
-
-
-    <changeSet id="product-description-max-1000" author="karim">
-        <preConditions onFail="MARK_RAN">
-            <columnExists tableName="products" columnName="description"/>
-        </preConditions>
-        <sql>
-            ALTER TABLE products MODIFY COLUMN description VARCHAR(1000);
-        </sql>
-    </changeSet>
-
-    <changeSet id="product-table-precheck" author="karim" context="prod,dev">
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="products"/>
-        </preConditions>
-        <sql>SELECT 1</sql>
-    </changeSet>
-
-    <changeSet id="product-price-is-positive" author="Karim Hanna">
-        <sql>
-            ALTER TABLE products
-                ADD CONSTRAINT chk_product_price_positive
-                    CHECK (price &gt; 0);
-        </sql>
     </changeSet>
 
 </databaseChangeLog>

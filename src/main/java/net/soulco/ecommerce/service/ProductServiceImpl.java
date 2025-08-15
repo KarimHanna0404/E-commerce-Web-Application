@@ -1,13 +1,11 @@
 package net.soulco.ecommerce.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import net.soulco.ecommerce.dto.ProductDto;
 import net.soulco.ecommerce.dto.UserDto;
 import net.soulco.ecommerce.mapper.ProductMapper;
 import net.soulco.ecommerce.mapper.UserMapper;
 import net.soulco.ecommerce.model.Product;
-import net.soulco.ecommerce.model.User;
 import net.soulco.ecommerce.repo.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +27,7 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.entityToDto(saved);
     }
 
+    // TODO: THIS SHOULD GET THE PRODUCTS FOR A CERTAIN USER
     @Override
     public List<ProductDto> getAllProducts() {
         return productRepository.findAll()
@@ -49,6 +48,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found: " + id));
 
+        // TODO: THIS UPDATE CAN BE DONE USING THE MAPPER AS WELL.
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
