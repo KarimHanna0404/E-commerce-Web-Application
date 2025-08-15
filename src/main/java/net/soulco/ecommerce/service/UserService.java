@@ -8,9 +8,9 @@ public interface UserService {
 
     void register(UserDto user);
 
-     Boolean auth (LoginDto loginDto);
+     Boolean auth (LoginDto loginDto, HttpSession session);
 
      UserDto showSession(HttpSession session);
 
-     String DeleteSession();
+     String DeleteSession(HttpSession session);
 }

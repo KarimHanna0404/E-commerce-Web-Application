@@ -1,6 +1,7 @@
 package net.soulco.ecommerce.service;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import net.soulco.ecommerce.dto.LoginDto;
 import net.soulco.ecommerce.dto.UserDto;
 import net.soulco.ecommerce.mapper.UserMapper;
@@ -9,19 +10,13 @@ import net.soulco.ecommerce.repo.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final HttpSession session;
 
-
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper , HttpSession session) {
-        this.userRepository = userRepository;
-        this.userMapper = userMapper;
-        this.session=session;
-    }
 
     @Override
     public void register(UserDto user) {
@@ -32,13 +27,13 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    public Boolean auth(LoginDto loginDto) {
+    public Boolean auth(LoginDto loginDto, HttpSession session) {
         User user = userRepository.findByUsername(loginDto.getUsername())
                 .filter(u -> u.getPassword().equals(loginDto.getPassword()))
                 .orElseThrow(()-> new RuntimeException("User not found"));
 
 
-UserDto userDto=userMapper.entityToDto(user);
+        UserDto userDto=userMapper.entityToDto(user);
 
         session.setAttribute("userData", userDto);
         return true;
@@ -50,7 +45,7 @@ UserDto userDto=userMapper.entityToDto(user);
         else
             throw new RuntimeException("user not found");
     }
-public String DeleteSession(){
+public String DeleteSession(HttpSession session){
     if(session.getAttribute("userData")!=null) {
         session.invalidate();
         return "logout Successful !";

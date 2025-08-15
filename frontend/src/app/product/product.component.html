@@ -12,9 +12,9 @@
 
     <div class="form-group">
       <label for="image">Image</label>
-      <input id="image" type="file" formControlName="image" class="form-control"
-             [class.is-invalid]="productForm.get('image')?.invalid && productForm.get('image')?.touched">
-      <div class="invalid-feedback" *ngIf="productForm.get('image')?.invalid && productForm.get('image')?.touched">
+      <input id="image" type="file" formControlName="imageUrl" class="form-control"
+                [class.is-invalid]="productForm.get('imageUrl')?.invalid && productForm.get('imageUrl')?.touched">
+      <div class="invalid-feedback" *ngIf="productForm.get('imageUrl')?.invalid && productForm.get('imageUrl')?.touched">
         *image url required
       </div>
     </div>
@@ -31,7 +31,7 @@
     <div class="form-group">
       <label for="price">Price</label>
       <input id="price" type="number" formControlName="price" class="form-control"
-             [class.is-invalid]="productForm.get('price')?.invalid && productForm.get('price')?.touched">
+            [class.is-invalid]="productForm.get('price')?.invalid && productForm.get('price')?.touched">
       <div class="invalid-feedback" *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched">
         *price required
       </div>

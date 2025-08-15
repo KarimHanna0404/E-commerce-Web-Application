@@ -32,7 +32,7 @@ public class UserController {
 
     @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity<?> login(@Valid @RequestBody LoginDto login, HttpSession session) {
-        boolean ok = userService.auth(login);
+        boolean ok = userService.auth(login,session);
         if (ok) {
             return ResponseEntity.ok(new ApiMessage("Login successful"));
         }
@@ -51,8 +51,8 @@ public class UserController {
     }
 
     @PostMapping(value = "/logout", produces = "application/json")
-    public ResponseEntity<ApiMessage> logout() {
-        userService.DeleteSession();
+    public ResponseEntity<ApiMessage> logout(HttpSession session) {
+        userService.DeleteSession(session);
         // 204 is also fine; using 200 + message for clarity
         return ResponseEntity.ok(new ApiMessage("Logged out"));
     }

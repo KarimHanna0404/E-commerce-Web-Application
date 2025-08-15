@@ -29,7 +29,8 @@ export class LoginComponent {
     this.loginError = null;
 
     if (this.loginForm.valid) {
-      this.httpClient.post('http://localhost:8080/api/user/login', this.loginForm.value).pipe(
+      this.httpClient.post('http://localhost:8080/api/user/login',this.loginForm.value,{
+    withCredentials: true}, ).pipe(
         catchError(error => {
           this.loginError = error.error?.Message || 'Failed login';
           return throwError(() => error);
