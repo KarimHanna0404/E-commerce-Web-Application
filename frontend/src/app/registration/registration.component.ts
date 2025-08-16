@@ -35,7 +35,7 @@ export class RegistrationComponent {
   onSubmit() {
     if (this.registrationForm.invalid) {
       this.registrationForm.markAllAsTouched();
-      return;
+      return ;
     }
     const payload = {
       username:this.registrationForm.value.username,
