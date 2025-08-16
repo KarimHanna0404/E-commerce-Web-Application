@@ -73,13 +73,14 @@ onFileChange(event: Event): void {
       this.errorMessage = 'Please fill all required fields correctly.';
       return;
     }
-  const payload = {
-    name: this.productForm.get('name')?.value,
-    imageUrl: this.productForm.get('image')?.value, 
-    description: this.productForm.get('description')?.value,
-    price: this.productForm.get('price')?.value,
-    code: this.productForm.get('code')?.value
-  };
+const payload = {
+  name: this.productForm.get('name')?.value,
+  imageUrl: this.productForm.get('imageUrl')?.value,
+  description: this.productForm.get('description')?.value,
+  price: this.productForm.get('price')?.value,
+  code: this.productForm.get('code')?.value
+};
+
 
     try {
       
