@@ -4,6 +4,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+
 
 function matchPasswords(group: AbstractControl): ValidationErrors | null {
   const pwd = group.get('password')?.value;
@@ -13,7 +15,7 @@ function matchPasswords(group: AbstractControl): ValidationErrors | null {
 
 @Component({
   selector: 'app-registration',
-  imports: [ReactiveFormsModule,RouterModule],
+  imports: [ReactiveFormsModule,RouterModule,CommonModule],
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss']
 })
@@ -21,10 +23,12 @@ export class RegistrationComponent {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
     router = inject(Router);
+    errorMessage: string | null = null;
+
 
 
   registrationForm = this.fb.group({
-        username: ['', Validators.required],
+    username: ['', [Validators.required,Validators.minLength(3)]],
     first_name: ['', Validators.required],
     last_name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
