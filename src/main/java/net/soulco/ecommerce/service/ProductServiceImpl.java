@@ -29,10 +29,10 @@ public class ProductServiceImpl implements ProductService {
 
     // TODO: THIS SHOULD GET THE PRODUCTS FOR A CERTAIN USER
     @Override
-    public List<ProductDto> getAllProducts() {
-        return productRepository.findAll()
+    public List<ProductDto> getProductsByOwnerUsername(String username) {
+        return productRepository.findAllByUserUsername(username)
                 .stream()
-                .map(productMapper::entityToDto)
+                .map(product -> productMapper.entityToDto(product))
                 .toList();
     }
 
@@ -66,4 +66,10 @@ public class ProductServiceImpl implements ProductService {
         }
         productRepository.deleteById(id);
     }
+
+    @Override
+    public List<Product> findAllByUserUsername(String username) {
+        return productRepository.findAllByUserUsername(username);
+    }
+
 }

@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.soulco.ecommerce.dto.ProductDto;
 import net.soulco.ecommerce.dto.UserDto;
+import net.soulco.ecommerce.model.Product;
 import net.soulco.ecommerce.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +28,21 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductDto> getAllProducts() {
-        return productService.getAllProducts();
+    public List<ProductDto> getProductsByOwner(@RequestParam(required = false) String username, HttpSession session) {
+
+        UserDto loggedUser = (UserDto) session.getAttribute("userData");
+        if (loggedUser == null) {
+            throw new RuntimeException("You must be logged in to add a product");
+        }
+        String effectiveUsername;
+        if(username == null || username.isBlank()){
+            effectiveUsername = loggedUser.getUsername();
+        }
+        else{
+            effectiveUsername = username;
+        }
+
+        return productService.getProductsByOwnerUsername(effectiveUsername);
     }
 
     @GetMapping("/{id}")
@@ -44,6 +58,11 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
+    }
+
+    @GetMapping("/search")
+    public List<Product> findAllByUserUsername(@RequestParam String name){
+        return productService.findAllByUserUsername(name);
     }
 }
 
