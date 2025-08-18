@@ -11,32 +11,73 @@
         <i class="fas fa-user"></i>
         <input type="text" formControlName="first_name" placeholder="First Name" required />
       </div>
+      <p *ngIf="registrationForm.get('first_name')?.invalid && registrationForm.get('first_name')?.touched">
+  First Name is required.
+</p>
 
       <div class="input-group">
         <i class="fas fa-user"></i>
         <input type="text" formControlName="last_name" placeholder="Last Name" required />
       </div>
+<p *ngIf="registrationForm.get('last_name')?.invalid && registrationForm.get('last_name')?.touched">
+  Last Name is required.
+</p>
 
             <div class="input-group">
         <i class="fas fa-user"></i>
         <input type="text" formControlName="username" placeholder="username" required />
       </div>
 
+      
+<p *ngIf="registrationForm.get('username')?.hasError('required') && registrationForm.get('username')?.touched">
+  Username is required.
+</p>
+
+<p *ngIf="registrationForm.get('username')?.hasError('minlength') && registrationForm.get('username')?.touched">
+  Username must be at least 3 characters long.
+</p>
+
 
       <div class="input-group">
         <i class="fas fa-envelope"></i>
         <input type="email" formControlName="email" placeholder="Email" required />
       </div>
+      <p *ngIf="registrationForm.get('email')?.hasError('required') && registrationForm.get('email')?.touched">
+  Email is required.
+</p>
+
+<p *ngIf="registrationForm.get('email')?.hasError('email') && registrationForm.get('email')?.touched">
+  Please enter a valid email address.
+</p>
+
 
       <div class="input-group">
         <i class="fas fa-lock"></i>
         <input type="password" formControlName="password" placeholder="Password" required />
       </div>
+<p class="error-message"
+   *ngIf="registrationForm.get('password')?.hasError('required') && registrationForm.get('password')?.touched">
+  Password is required.
+</p>
+
+<p class="error-message"
+   *ngIf="registrationForm.get('password')?.hasError('passwordStrength') && registrationForm.get('password')?.touched">
+  Password must be at least 8 characters and include uppercase, lowercase, number, and special character.
+</p>
 
       <div class="input-group">
         <i class="fas fa-lock"></i>
         <input type="password" formControlName="confirmPassword" placeholder="Password Again" required />
       </div>
+      <p class="error-message"
+   *ngIf="registrationForm.get('confirmPassword')?.hasError('required') && registrationForm.get('confirmPassword')?.touched">
+  Please confirm your password.
+</p>
+
+<p class="error-message"
+   *ngIf="registrationForm.hasError('passwordMismatch') && registrationForm.get('confirmPassword')?.touched">
+  Passwords do not match.
+</p>
 
       <button type="submit" class="btn">SIGN UP</button>
     </form>

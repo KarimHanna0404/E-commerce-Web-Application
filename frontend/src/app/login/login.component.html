@@ -58,12 +58,12 @@
       @if (loginForm.invalid && (loginForm.touched)) {
             <p>Password is required.</p>}
 
-       <p *ngIf="loginError" class="error-message">{{ loginError }}</p>
-      <button type="submit"  class="login-button">
-        LOGIN
-      </button>
-    </form>
-        <a routerLink="/registration" class="login-link">Create Account</a>
-
+            <button type="submit"  class="login-button">
+              LOGIN
+            </button>
+          </form>
+          <a routerLink="/registration" class="login-link">Create Account</a>
+          <p *ngIf="loginError" class="error-message">{{ loginError }}</p>
   </div>
+  
 </div>

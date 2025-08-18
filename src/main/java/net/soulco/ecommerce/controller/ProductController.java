@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.soulco.ecommerce.dto.ProductDto;
 import net.soulco.ecommerce.dto.UserDto;
+import net.soulco.ecommerce.model.Product;
 import net.soulco.ecommerce.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,6 +58,11 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
+    }
+
+    @GetMapping("/search")
+    public List<Product> findAllByUserUsername(@RequestParam String name){
+        return productService.findAllByUserUsername(name);
     }
 }
 

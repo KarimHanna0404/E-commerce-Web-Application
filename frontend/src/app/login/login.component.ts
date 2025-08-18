@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Router, RouterModule } from '@angular/router'; // Added Router import
+import { Router, RouterModule } from '@angular/router'; 
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -32,7 +32,7 @@ export class LoginComponent {
       this.httpClient.post('http://localhost:8080/api/user/login',this.loginForm.value,{
     withCredentials: true}, ).pipe(
         catchError(error => {
-          this.loginError = error.error?.Message || 'Failed login';
+          this.loginError = error.error?.Message || 'Username or Password invaild';
           return throwError(() => error);
         })
       ).subscribe({
