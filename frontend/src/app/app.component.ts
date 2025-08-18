@@ -1,30 +1,29 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import {RouterOutlet} from '@angular/router';
-import {MenuItem} from "primeng/api";
-
-
+import { RouterOutlet } from '@angular/router';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,RouterModule],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
+  standalone: false
 })
 export class AppComponent implements OnInit {
-
   title = 'frontend';
   model: MenuItem[] | undefined;
 
   ngOnInit(): void {
     this.model = [
       {
-        label: "Home",
-        routerLink: ["/"],
+        label: 'Home',
+        routerLink: ['/'],
         icon: 'pi pi-home',
-      }];
-    const styleTag = document.querySelector('[data-primeng-style-id="global-variables"]');
+      },
+    ];
+    const styleTag = document.querySelector(
+      '[data-primeng-style-id="global-variables"]'
+    );
     console.log('Active theme CSS:', styleTag?.textContent?.slice(0, 500));
   }
-
 }
