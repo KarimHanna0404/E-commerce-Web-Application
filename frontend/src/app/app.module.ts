@@ -15,6 +15,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { MessageModule } from 'primeng/message';
+import { InputTextModule } from 'primeng/inputtext';
+import { FloatLabelModule } from 'primeng/floatlabel';
+
 
 @NgModule({
   imports: [
@@ -25,7 +28,9 @@ import { MessageModule } from 'primeng/message';
     RouterOutlet,
     InputGroupModule,
     InputGroupAddonModule,
-    MessageModule
+    MessageModule,
+    FloatLabelModule,
+    InputTextModule
   ],
   declarations: [
     AppComponent,
