@@ -1,10 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
 import { Component, inject } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { catchError, throwError } from 'rxjs';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',

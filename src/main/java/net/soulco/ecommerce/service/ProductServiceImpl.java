@@ -27,15 +27,6 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.entityToDto(saved);
     }
 
-    // TODO: THIS SHOULD GET THE PRODUCTS FOR A CERTAIN USER
-    @Override
-    public List<ProductDto> getProductsByOwnerUsername(String username) {
-        return productRepository.findAllByUserUsername(username)
-                .stream()
-                .map(product -> productMapper.entityToDto(product))
-                .toList();
-    }
-
     @Override
     public ProductDto getProductById(Long id) {
         Product product = productRepository.findById(id)
@@ -48,13 +39,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found: " + id));
 
-        // TODO: THIS UPDATE CAN BE DONE USING THE MAPPER AS WELL.
-        product.setName(dto.getName());
-        product.setDescription(dto.getDescription());
-        product.setPrice(dto.getPrice());
-        product.setCode(dto.getCode());
-        product.setImageUrl(dto.getImageUrl());
-
+        productMapper.update(dto, product);
         Product updated = productRepository.save(product);
         return productMapper.entityToDto(updated);
     }
@@ -68,8 +53,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findAllByUserUsername(String username) {
-        return productRepository.findAllByUserUsername(username);
+    public List<ProductDto> search(String username, String query) {
+        return productRepository.findAllByUsernameAndName(username, query)
+                .stream().map(productMapper::entityToDto)
+                .toList();
     }
-
 }

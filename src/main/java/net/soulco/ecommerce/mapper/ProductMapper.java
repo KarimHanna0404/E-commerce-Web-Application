@@ -4,6 +4,7 @@ import net.soulco.ecommerce.dto.ProductDto;
 import net.soulco.ecommerce.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.ReportingPolicy;
 
@@ -19,4 +20,5 @@ public interface ProductMapper {
 
     Product dtoToEntity(ProductDto productDto);
 
+    void update(ProductDto productDto, @MappingTarget Product product);
 }

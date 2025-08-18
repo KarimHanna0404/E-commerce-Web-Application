@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.soulco.ecommerce.dto.ProductDto;
 import net.soulco.ecommerce.dto.UserDto;
-import net.soulco.ecommerce.model.Product;
 import net.soulco.ecommerce.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,22 +26,13 @@ public class ProductController {
         return productService.createProduct(dto, loggedUser);
     }
 
-    @GetMapping
-    public List<ProductDto> getProductsByOwner(@RequestParam(required = false) String username, HttpSession session) {
-
+    @GetMapping("/search")
+    public List<ProductDto> searchProducts(@RequestParam(required = false) String query, HttpSession session) {
         UserDto loggedUser = (UserDto) session.getAttribute("userData");
         if (loggedUser == null) {
-            throw new RuntimeException("You must be logged in to add a product");
+            throw new RuntimeException("User is not logged in");
         }
-        String effectiveUsername;
-        if(username == null || username.isBlank()){
-            effectiveUsername = loggedUser.getUsername();
-        }
-        else{
-            effectiveUsername = username;
-        }
-
-        return productService.getProductsByOwnerUsername(effectiveUsername);
+        return productService.search(loggedUser.getUsername(), query);
     }
 
     @GetMapping("/{id}")
@@ -59,15 +49,4 @@ public class ProductController {
     public void deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
     }
-
-    @GetMapping("/search")
-    public List<Product> findAllByUserUsername(@RequestParam String name){
-        return productService.findAllByUserUsername(name);
-    }
 }
-
-
-// NOTES
-// LIQUIBASE => ORDER OF EXECUTION, NOT NEEDED EMPTY CHECKS, FOREIGN KEY WRONG TABLE NAME AND TYPES
-// HIBERNATE => ENABLING HIBERNATE DDL
-// PRODUCT => FORGETTING @Valid IN CREATE METHOD, SOME TODOS IN SERVICE
