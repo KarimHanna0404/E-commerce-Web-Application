@@ -27,8 +27,21 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductDto> getAllProducts() {
-        return productService.getAllProducts();
+    public List<ProductDto> getProductsByOwner(@RequestParam(required = false) String username, HttpSession session) {
+
+        UserDto loggedUser = (UserDto) session.getAttribute("userData");
+        if (loggedUser == null) {
+            throw new RuntimeException("You must be logged in to add a product");
+        }
+        String effectiveUsername;
+        if(username == null || username.isBlank()){
+            effectiveUsername = loggedUser.getUsername();
+        }
+        else{
+            effectiveUsername = username;
+        }
+
+        return productService.getProductsByOwnerUsername(effectiveUsername);
     }
 
     @GetMapping("/{id}")

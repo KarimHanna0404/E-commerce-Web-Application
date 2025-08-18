@@ -10,9 +10,11 @@ public interface ProductService {
 
    ProductDto createProduct(ProductDto dto, UserDto userDto);
 
-   List<ProductDto> getAllProducts();
 
-   ProductDto getProductById(Long id);
+    // TODO: THIS SHOULD GET THE PRODUCTS FOR A CERTAIN USER
+    List<ProductDto> getProductsByOwnerUsername(String username);
+
+    ProductDto getProductById(Long id);
 
    ProductDto updateProduct(Long id, ProductDto dto);
 
