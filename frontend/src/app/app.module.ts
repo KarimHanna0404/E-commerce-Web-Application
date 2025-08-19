@@ -15,7 +15,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { MessageModule } from 'primeng/message';
-<<<<<<< Updated upstream
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { EditorModule } from 'primeng/editor';
@@ -24,19 +23,11 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
 import { ToastModule } from 'primeng/toast';
-
 import { MessageService } from 'primeng/api';
 import { ProgressBar, ProgressBarModule } from 'primeng/progressbar';
-
-
-
-
-
-
-=======
 import { CardModule } from 'primeng/card';
 import { HomepageComponent } from './pages/home/home.component';
->>>>>>> Stashed changes
+
 
 
 @NgModule({
@@ -51,7 +42,6 @@ import { HomepageComponent } from './pages/home/home.component';
     InputGroupModule,
     InputGroupAddonModule,
     MessageModule,
-<<<<<<< Updated upstream
     FloatLabelModule,
     InputTextModule,
     EditorModule,
@@ -61,16 +51,9 @@ import { HomepageComponent } from './pages/home/home.component';
     BadgeModule,
     ToastModule,
     ProgressBarModule,
-    
-   
-    
-   
-   
-
-    
-=======
     CardModule,
->>>>>>> Stashed changes
+    CardModule,
+
   ],
   declarations: [
     AppComponent,
