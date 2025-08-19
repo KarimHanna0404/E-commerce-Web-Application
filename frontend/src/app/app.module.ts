@@ -25,8 +25,15 @@ import { BadgeModule } from 'primeng/badge';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ProgressBar, ProgressBarModule } from 'primeng/progressbar';
-import { CardModule } from 'primeng/card';
 import { HomepageComponent } from './pages/home/home.component';
+import { MenubarModule } from 'primeng/menubar';
+import { AvatarModule } from 'primeng/avatar';
+import { CardModule } from 'primeng/card';
+
+
+
+
+
 
 
 
@@ -51,9 +58,12 @@ import { HomepageComponent } from './pages/home/home.component';
     BadgeModule,
     ToastModule,
     ProgressBarModule,
+    MenubarModule,
+    AvatarModule,
     CardModule,
-    CardModule,
-
+    ProgressBar
+  
+    
   ],
   declarations: [
     AppComponent,
@@ -76,7 +86,7 @@ import { HomepageComponent } from './pages/home/home.component';
         },
       },
     }),
-    
+
   ],
   bootstrap: [AppComponent],
 })
