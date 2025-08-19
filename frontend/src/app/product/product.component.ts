@@ -1,9 +1,6 @@
-import { Component, OnInit, ViewChild ,inject} from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
 import { FileUploadHandlerEvent } from 'primeng/fileupload';
 import { FileUpload } from 'primeng/fileupload';
 import { Router } from '@angular/router';
@@ -21,11 +18,11 @@ interface Product {
   selector: 'app-create-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class CreateProductComponent implements OnInit {
   @ViewChild('fileUpload') fileUpload?: FileUpload;
-    private router = inject(Router); 
+  private router = inject(Router);
   productForm: FormGroup;
   successMessage: string | null = null;
   errorMessage: string | null = null;
@@ -46,34 +43,30 @@ export class CreateProductComponent implements OnInit {
     this.loadProducts();
   }
 
+  onFileChange(event: FileUploadHandlerEvent): void {
+    const file = event.files && event.files.length ? event.files[0] : null;
 
+    if (!file) {
+      return;
+    }
 
-onFileChange(event: FileUploadHandlerEvent): void {
-  const file = event.files && event.files.length ? event.files[0] : null;
+    const validImageTypes = ['image/png', 'image/jpeg'];
 
-  if (!file) {
-    return;
+    if (!validImageTypes.includes(file.type)) {
+      this.errorMessage = 'Please upload a PNG or JPG file.';
+      this.productForm.patchValue({ imageUrl: null });
+      this.selectedImageBase64 = null;
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.selectedImageBase64 = reader.result as string;
+      this.productForm.patchValue({ imageUrl: this.selectedImageBase64 });
+      this.errorMessage = null;
+    };
+    reader.readAsDataURL(file);
   }
-
-  const validImageTypes = ['image/png', 'image/jpeg'];
-
-  if (!validImageTypes.includes(file.type)) {
-    this.errorMessage = 'Please upload a PNG or JPG file.';
-    this.productForm.patchValue({ imageUrl: null });
-    this.selectedImageBase64 = null;
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    this.selectedImageBase64 = reader.result as string;
-    this.productForm.patchValue({ imageUrl: this.selectedImageBase64 });
-    this.errorMessage = null;
-    
-  };
-  reader.readAsDataURL(file);
-}
-
 
   async onSubmit(): Promise<void> {
     if (this.productForm.invalid) {
@@ -101,20 +94,20 @@ onFileChange(event: FileUploadHandlerEvent): void {
       this.errorMessage = null;
       this.productForm.reset();
 
-          this.selectedImageBase64 = null;
+      this.selectedImageBase64 = null;
 
-    this.fileUpload?.clear();
+      this.fileUpload?.clear();
 
       if (response) {
         this.products.push(response);
       }
-    if (response) {
-      this.products.push(response);
-      this.successMessage = 'Product created successfully!';
-      this.errorMessage = null;
-      this.productForm.reset();
-      this.router.navigate(['/homepage']);
-    }
+      if (response) {
+        this.products.push(response);
+        this.successMessage = 'Product created successfully!';
+        this.errorMessage = null;
+        this.productForm.reset();
+        this.router.navigate(['/homepage']);
+      }
     } catch (error: any) {
       this.errorMessage = error.error?.message || 'Error creating product.';
       this.successMessage = null;
