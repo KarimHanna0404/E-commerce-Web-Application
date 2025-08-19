@@ -6,7 +6,7 @@ import { MenuItem } from 'primeng/api';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'], 
+  styleUrls: ['./app.component.scss'],
   standalone: false
 })
 export class AppComponent implements OnInit {
@@ -18,19 +18,27 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.model = [
-      //adjust path 
-      { label: 'Products', icon: 'pi pi-box', routerLink: ['/products'] }, 
+      { label: 'Homepage', icon: 'pi pi-home', routerLink: '/homepage' },
     ];
+
+    const setMenuVisibility = (url: string) => {
+      this.showMenu = url.startsWith('/homepage');
+    };
+
+    setMenuVisibility(this.router.url);
 
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe((e: NavigationEnd) => {
-        const url = e.urlAfterRedirects;
-        //change this to the correct path 
-        this.showMenu = url.startsWith('/products');
-      });
+      .subscribe((e: NavigationEnd) => setMenuVisibility(e.urlAfterRedirects));
 
     const styleTag = document.querySelector('[data-primeng-style-id="global-variables"]');
     console.log('Active theme CSS:', styleTag?.textContent?.slice(0, 500));
+  }
+
+  logout() {
+    sessionStorage.clear();
+    localStorage.clear();
+  
+    this.router.navigate(['/login']);
   }
 }
