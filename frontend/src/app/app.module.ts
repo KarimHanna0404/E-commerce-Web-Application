@@ -17,6 +17,21 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { MessageModule } from 'primeng/message';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
+import { EditorModule } from 'primeng/editor';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { FileUploadModule } from 'primeng/fileupload';
+import { ButtonModule } from 'primeng/button';
+import { BadgeModule } from 'primeng/badge';
+import { ToastModule } from 'primeng/toast';
+
+import { MessageService } from 'primeng/api';
+import { ProgressBar, ProgressBarModule } from 'primeng/progressbar';
+
+
+
+
+
+
 
 
 @NgModule({
@@ -30,7 +45,21 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     InputGroupAddonModule,
     MessageModule,
     FloatLabelModule,
-    InputTextModule
+    InputTextModule,
+    EditorModule,
+    InputNumberModule,
+    FileUploadModule,
+    ButtonModule,
+    BadgeModule,
+    ToastModule,
+    ProgressBarModule,
+    
+   
+    
+   
+   
+
+    
   ],
   declarations: [
     AppComponent,
@@ -39,6 +68,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     CreateProductComponent,
   ],
   providers: [
+    MessageService,
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
@@ -51,6 +81,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
         },
       },
     }),
+    
   ],
   bootstrap: [AppComponent],
 })

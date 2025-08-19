@@ -3,50 +3,80 @@
     <h2>Create Product</h2>
   <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
 
-    <div class="form-group">
-      <label for="name">Product Name</label>
-      <input id="name" formControlName="name" class="form-control"
-             [class.is-invalid]="productForm.get('name')?.invalid && productForm.get('name')?.touched">
-      <div class="invalid-feedback" *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched">
-        *name required
-      </div>
-    </div>
+    <p-floatlabel>
+    <input pInputText id="over_label" formControlName="name" autocomplete="off" />
+    <label for="name">Product Name</label>
+</p-floatlabel>
+@if(productForm.get('name')?.invalid && productForm.get('name')?.touched){
+  <p-message severity="error" variant="simple">*name required</p-message>
+}
 
-    <div class="form-group">
-      <label for="image">Image</label>
-      <input id="image" type="file" formControlName="imageUrl" class="form-control"
-                [class.is-invalid]="productForm.get('imageUrl')?.invalid && productForm.get('imageUrl')?.touched">
-      <div class="invalid-feedback" *ngIf="productForm.get('imageUrl')?.invalid && productForm.get('imageUrl')?.touched">
-        *image url required
-      </div>
-    </div>
 
-    <div class="form-group">
-      <label for="description">Description</label>
-      <textarea id="description" formControlName="description" class="form-control"
-                [class.is-invalid]="productForm.get('description')?.invalid && productForm.get('description')?.touched"></textarea>
-      <div class="invalid-feedback" *ngIf="productForm.get('description')?.invalid && productForm.get('description')?.touched">
-        *description must be 1000 characters maximum
-      </div>
-    </div>
 
-    <div class="form-group">
-      <label for="price">Price</label>
-      <input id="price" type="number" formControlName="price" class="form-control"
-            [class.is-invalid]="productForm.get('price')?.invalid && productForm.get('price')?.touched">
-      <div class="invalid-feedback" *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched">
-        *price required
-      </div>
-    </div>
 
-    <div class="form-group">
-      <label for="code">Code</label>
-      <input id="code" type="text" formControlName="code" class="form-control"
-             [class.is-invalid]="productForm.get('code')?.invalid && productForm.get('code')?.touched">
-      <div class="invalid-feedback" *ngIf="productForm.get('code')?.invalid && productForm.get('code')?.touched">
-        *code required
-      </div>
+<label for="description">Description</label>
+<p-editor formControlName="description" [style]="{ height: '320px' }">
+    <ng-template #header>
+        <span class="ql-formats">
+            <button type="button" class="ql-bold" aria-label="Bold"></button>
+            <button type="button" class="ql-italic" aria-label="Italic"></button>
+            <button type="button" class="ql-underline" aria-label="Underline"></button>
+        </span>
+    </ng-template>
+</p-editor>
+
+
+<p-inputnumber formControlName="price" inputId="currency-us" mode="currency" currency="USD" locale="en-US" />
+@if(productForm.get('price')?.invalid && productForm.get('price')?.touched){
+  <p-message severity="error" variant="simple">*price required</p-message>
+}
+
+
+   <p-floatlabel>
+    <input pInputText id="over_label" formControlName="code" autocomplete="off" />
+    <label for="code">Code</label>
+</p-floatlabel>
+<p-message
+  *ngIf="productForm.get('code')?.hasError('required') && productForm.get('code')?.touched"
+  severity="error" variant="simple">
+  *Code required
+</p-message>
+
+<p-fileUpload
+ #fileUpload
+  name="image"
+  [customUpload]="true"
+  (uploadHandler)="onFileChange($event)"
+  [accept]="'image/png,image/jpeg'"
+  [maxFileSize]="1048576"
+  [auto]="true"
+  [showUploadButton]="false"
+  [showCancelButton]="false"
+  
+  chooseLabel="Select Image"
+  mode="advanced"
+>
+  <ng-template #empty>
+    <div style="padding: 1rem; border: 2px dashed #ccc; text-align: center;">
+      Drag and drop an image here or click to select
     </div>
+  </ng-template>
+
+  <div *ngIf="selectedImageBase64" style="margin-top: 1rem;">
+    <p>Preview:</p>
+    <img [src]="selectedImageBase64" alt="Preview" style="max-width: 200px; max-height: 200px;" />
+  </div>
+
+  <div *ngIf="errorMessage" style="color: red; margin-top: 0.5rem;">
+    {{ errorMessage }}
+  </div>
+</p-fileUpload>
+
+  @if(productForm.get('imageUrl')?.invalid && productForm.get('imageUrl')?.touched){
+    <p-message severity="error" variant="simple">*Image URL required</p-message>
+  }
+  
+
 
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>

@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FileUploadHandlerEvent } from 'primeng/fileupload';
+import { FileUpload } from 'primeng/fileupload';
 
 interface Product {
   id: number;
@@ -21,6 +23,7 @@ interface Product {
   standalone: false
 })
 export class CreateProductComponent implements OnInit {
+   @ViewChild('fileUpload') fileUpload?: FileUpload;
   productForm: FormGroup;
   successMessage: string | null = null;
   errorMessage: string | null = null;
@@ -41,26 +44,36 @@ export class CreateProductComponent implements OnInit {
     this.loadProducts();
   }
 
-  onFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length) {
-      const file = input.files[0];
-      const validImageTypes = ['image/png', 'image/jpeg'];
 
-      if (validImageTypes.includes(file.type)) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.selectedImageBase64 = reader.result as string;
-          this.productForm.patchValue({ imageUrl: this.selectedImageBase64 });
-        };
-        reader.readAsDataURL(file);
-        this.errorMessage = null;
-      } else {
-        this.errorMessage = 'Please upload a PNG or JPG file.';
-        this.productForm.get('image')?.setValue(null);
-      }
-    }
+
+onFileChange(event: FileUploadHandlerEvent): void {
+  const file = event.files && event.files.length ? event.files[0] : null;
+
+  if (!file) {
+    return;
   }
+
+  const validImageTypes = ['image/png', 'image/jpeg'];
+
+  if (!validImageTypes.includes(file.type)) {
+    this.errorMessage = 'Please upload a PNG or JPG file.';
+    this.productForm.patchValue({ imageUrl: null });
+    this.selectedImageBase64 = null;
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.selectedImageBase64 = reader.result as string;
+    this.productForm.patchValue({ imageUrl: this.selectedImageBase64 });
+    this.errorMessage = null;
+    
+  };
+  reader.readAsDataURL(file);
+}
+
+
+  
 
   async onSubmit(): Promise<void> {
     if (this.productForm.invalid) {
@@ -68,6 +81,9 @@ export class CreateProductComponent implements OnInit {
       this.errorMessage = 'Please fill all required fields correctly.';
       return;
     }
+
+   
+ 
     const payload = {
       name: this.productForm.get('name')?.value,
       imageUrl: this.productForm.get('imageUrl')?.value,
@@ -86,6 +102,11 @@ export class CreateProductComponent implements OnInit {
       this.successMessage = 'Product created successfully!';
       this.errorMessage = null;
       this.productForm.reset();
+
+          this.selectedImageBase64 = null;
+
+    this.fileUpload?.clear();
+
       if (response) {
         this.products.push(response);
       }

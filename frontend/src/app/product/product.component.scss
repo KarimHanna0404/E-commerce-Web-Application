@@ -82,3 +82,17 @@ label {
   border-radius: 4px;
   border-top: none;
 }
+
+::ng-deep .p-fileupload .p-progressbar {
+  display: none !important;
+}
+
+/* Hide pending text */
+::ng-deep .p-fileupload .p-fileupload-file-status {
+  display: none !important;
+}
+
+/* Hide action buttons (optional) */
+::ng-deep .p-fileupload .p-fileupload-buttonbar {
+  display: none !important;
+}
