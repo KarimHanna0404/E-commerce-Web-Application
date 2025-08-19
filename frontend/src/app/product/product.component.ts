@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -6,6 +7,12 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FileUploadHandlerEvent } from 'primeng/fileupload';
 import { FileUpload } from 'primeng/fileupload';
+=======
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+>>>>>>> Stashed changes
 
 interface Product {
   id: number;
@@ -23,7 +30,12 @@ interface Product {
   standalone: false
 })
 export class CreateProductComponent implements OnInit {
+<<<<<<< Updated upstream
    @ViewChild('fileUpload') fileUpload?: FileUpload;
+=======
+
+    private router = inject(Router); 
+>>>>>>> Stashed changes
   productForm: FormGroup;
   successMessage: string | null = null;
   errorMessage: string | null = null;
@@ -102,6 +114,7 @@ onFileChange(event: FileUploadHandlerEvent): void {
       this.successMessage = 'Product created successfully!';
       this.errorMessage = null;
       this.productForm.reset();
+<<<<<<< Updated upstream
 
           this.selectedImageBase64 = null;
 
@@ -110,6 +123,15 @@ onFileChange(event: FileUploadHandlerEvent): void {
       if (response) {
         this.products.push(response);
       }
+=======
+    if (response) {
+      this.products.push(response);
+      this.successMessage = 'Product created successfully!';
+      this.errorMessage = null;
+      this.productForm.reset();
+      this.router.navigate(['/homepage']);
+    }
+>>>>>>> Stashed changes
     } catch (error: any) {
       this.errorMessage = error.error?.message || 'Error creating product.';
       this.successMessage = null;

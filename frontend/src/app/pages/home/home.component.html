@@ -1,0 +1,37 @@
+<div class="dashboard">
+    <div class="dashboard__header">
+    <h1>Product Dashboard</h1>
+    <button class="dashboard__add-btn" [routerLink]="'/products/new'">
+        <span class="plus-icon">+</span> Add New Product
+    </button>
+    </div>
+      <input 
+    type="text" 
+    placeholder="Search products..." 
+    [(ngModel)]="searchText"
+    class="search-bar"
+  />
+
+    <div class="dashboard__stats">
+    <div class="stat-card">
+    <span class="stat-card__number">{{ totalProducts }}</span>
+    <span class="stat-card__label">Total Products</span>
+    </div>
+    </div>
+
+    <div class="dashboard__products-section">
+        <h2>All Products</h2>
+
+    <div class="products-grid">
+      <p-card *ngFor="let product of products" [style]="{ width: '20rem', margin: '1rem' }">
+        <ng-template #header>
+        <img [src]="product.imageUrl" alt="{{ product.name }}" class="w-full" />
+        </ng-template>
+        <ng-template #title>{{ product.name }}</ng-template>
+        <ng-template #subtitle>Code: {{ product.code }}</ng-template>
+        <p>{{ product.description }}</p>
+        <p class="price">💲 {{ product.price }}</p>
+    </p-card>
+    </div>
+    </div>
+</div>
