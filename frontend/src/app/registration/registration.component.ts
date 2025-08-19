@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { MenuItem } from 'primeng/api';
 import {
   FormBuilder,
   Validators,
@@ -23,7 +24,13 @@ function matchPasswords(group: AbstractControl): ValidationErrors | null {
   styleUrls: ['./registration.component.scss'],
   standalone: false
 })
+
 export class RegistrationComponent {
+
+  items: MenuItem[] = [
+    { label: 'Products', icon: 'pi pi-box', routerLink: '/products' },
+  ];
+
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
   router = inject(Router);

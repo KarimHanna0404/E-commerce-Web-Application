@@ -1,3 +1,5 @@
+
+
 <div class="register-container">
   <div class="form-box">
     <div class="icon">
@@ -28,7 +30,7 @@
         <input type="text" formControlName="username" placeholder="username" required />
       </div>
 
-      
+
 <p *ngIf="registrationForm.get('username')?.hasError('required') && registrationForm.get('username')?.touched">
   Username is required.
 </p>
