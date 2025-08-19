@@ -10,6 +10,7 @@
     placeholder="Search products..."
     [(ngModel)]="searchText"
     class="search-bar"
+    (change)="onSearchProducts($event)"
   />
 
   <div class="dashboard__stats">

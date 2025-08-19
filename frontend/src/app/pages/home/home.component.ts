@@ -28,25 +28,18 @@ export class HomepageComponent implements OnInit {
     this.searchProducts();
   }
 
-  // loadProducts() {
-  //   this.http
-  //     .get<Product[]>('http://localhost:8080/api/products/search')
-  //     .subscribe((data) => {
-  //       this.products = data;
-  //     });
-  // }
+  onSearchProducts(_: any) {
+    this.searchProducts();
+  }
 
   searchProducts() {
-    // if (!this.searchText) {
-    //   this.loadProducts();
-    //   return;
-    // }
-
-    const params: HttpParams = new HttpParams();
-    if (this.searchText?.trim() !== '') params.set('query', this.searchText);
+    let params: HttpParams = new HttpParams();
+    if (this.searchText) {
+      params = params.set('query', this.searchText);
+    }
     this.http
       .get<Product[]>(`http://localhost:8080/api/products/search`, {
-        params: params,
+        params,
         withCredentials: true,
       })
       .subscribe((data) => {

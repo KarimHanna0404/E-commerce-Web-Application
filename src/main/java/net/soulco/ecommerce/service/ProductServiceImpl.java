@@ -34,6 +34,7 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.entityToDto(product);
     }
 
+    // TODO: PRODUCT IS ONLY EDITABLE BY ITS OWN USER
     @Override
     public ProductDto updateProduct(Long id, ProductDto dto) {
         Product product = productRepository.findById(id)
