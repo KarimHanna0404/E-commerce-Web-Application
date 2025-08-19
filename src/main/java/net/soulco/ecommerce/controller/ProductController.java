@@ -41,9 +41,15 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ProductDto updateProduct(@PathVariable Long id, @RequestBody ProductDto dto) {
-        return productService.updateProduct(id, dto);
+    public ProductDto updateProduct(@PathVariable Long id, @RequestBody ProductDto dto, HttpSession session) {
+        UserDto loggedUser = (UserDto) session.getAttribute("userData");
+        if (loggedUser == null) {
+            throw new RuntimeException("User is not logged in");
+        }
+
+        return productService.updateProduct(id, dto, loggedUser.getUsername());
     }
+
 
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id) {

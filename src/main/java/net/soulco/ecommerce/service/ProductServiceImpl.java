@@ -34,14 +34,16 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.entityToDto(product);
     }
 
+
     // TODO: PRODUCT IS ONLY EDITABLE BY ITS OWN USER
     @Override
-    public ProductDto updateProduct(Long id, ProductDto dto) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found: " + id));
+    public ProductDto updateProduct(Long id, ProductDto dto, String username) {
+        Product product = productRepository.findByIdAndUsername(id,username)
+                .orElseThrow(() -> new RuntimeException("Product not found or not owned by user"));
 
         productMapper.update(dto, product);
         Product updated = productRepository.save(product);
+
         return productMapper.entityToDto(updated);
     }
 
