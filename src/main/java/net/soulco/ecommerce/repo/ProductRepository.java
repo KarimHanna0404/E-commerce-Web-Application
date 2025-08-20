@@ -18,4 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("select p from Product p where p.id = :id and p.user.username = :username")
     Optional<Product> findByIdAndUsername(Long id, String username);
+
+    @Query ("SELECT COUNT(p) FROM Product p")
+    Long totalProductCount();
 }

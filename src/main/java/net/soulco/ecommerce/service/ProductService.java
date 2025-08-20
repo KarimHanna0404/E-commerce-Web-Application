@@ -17,4 +17,6 @@ public interface ProductService {
 
     List<ProductDto> search(String username, String query);
 
+    int getTotalProductCount();
+
 }
