@@ -48,6 +48,8 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.entityToDto(updated);
     }
 
+    //Everything is wrapped in a transaction using the Spring @Transactional, if everything succeeds -> transaction is committed and saved to the db
+    //if transaction does not go threw -> undo changes
     @Override
     @Transactional
     public void deleteProduct(Long id, String username) {
