@@ -59,16 +59,14 @@ onEdit(id: number): void {
 
 
 deleteProduct(product: Product) {
-  if (confirm(`Delete product "${product.name}"?`)) {
-    this.http
-      .delete(`http://localhost:8080/api/products/${product.id}`, {
-        withCredentials: true,
-      })
-      .subscribe(() => {
-        this.products = this.products.filter((p) => p.id !== product.id);
-        this.totalProducts = this.products.length;
-      });
-  }
+  this.http
+    .delete(`http://localhost:8080/api/products/${product.id}`, {
+      withCredentials: true,
+    })
+    .subscribe(() => {
+      this.products = this.products.filter((p) => p.id !== product.id);
+      this.totalProducts = this.products.length;
+    });
 }
 
 }
