@@ -33,20 +33,22 @@ export class HomepageComponent implements OnInit {
   onSearchProducts(_: any) {
     this.searchProducts();
   }
-
+  
+searchedProducts: number = 0;
   searchProducts() {
     let params: HttpParams = new HttpParams();
     if (this.searchText) {
       params = params.set('query', this.searchText);
     }
     this.http
-      .get<{ Products: Product[]; totalProducts: number }>(`http://localhost:8080/api/products/search`, {
+      .get<{ Products: Product[]; totalProducts: number ; searchedProducts: number}>(`http://localhost:8080/api/products/search`, {
         params,
         withCredentials: true,
       })
       .subscribe((data) => {
         this.products = data.Products;
         this.totalProducts = data.totalProducts;
+        this.searchedProducts = data.searchedProducts;
       });
   }
 
