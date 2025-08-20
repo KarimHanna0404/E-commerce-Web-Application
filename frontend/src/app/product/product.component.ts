@@ -33,7 +33,7 @@ export class CreateProductComponent implements OnInit {
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(255)]],
-      imageUrl: [null, Validators.required],
+      image: [null, Validators.required],
       description: ['', Validators.maxLength(1000)],
       price: [0, [Validators.required, Validators.min(0.01)]],
       code: ['', [Validators.required, Validators.pattern(/^[A-Za-z0-9]+$/)]],
