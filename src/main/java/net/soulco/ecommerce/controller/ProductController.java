@@ -39,9 +39,12 @@ public class ProductController {
         }
         List<ProductDto> productList= productService.search(loggedUser.getUsername(), query);
         int allProducts=productService.getTotalProductCount();
+        int searchedProducts = productService.getSearchedProductCount(loggedUser.getUsername(),query);
+
         Map<String, Object> response = new HashMap<>();
         response.put("Products",productList);
         response.put("totalProducts",allProducts);
+        response.put("searchedProducts",searchedProducts );
         return response;
     }
 

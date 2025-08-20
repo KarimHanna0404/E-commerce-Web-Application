@@ -19,4 +19,6 @@ public interface ProductService {
 
     int getTotalProductCount();
 
+    int getSearchedProductCount(String username, String name);
+
 }

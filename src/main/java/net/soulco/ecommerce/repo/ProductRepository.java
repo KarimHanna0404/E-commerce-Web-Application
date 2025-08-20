@@ -16,6 +16,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "where p.user.username = :username and (:name is null or p.name like concat('%', :name, '%'))")
     List<Product> findAllByUsernameAndName(String username, String name);
 
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.user.username = :username AND (:name IS NULL OR p.name LIKE CONCAT('%', :name, '%'))")
+    Long countAllByUsernameAndName(String username, String name);
+
+
     @Query("select p from Product p where p.id = :id and p.user.username = :username")
     Optional<Product> findByIdAndUsername(Long id, String username);
 

@@ -71,6 +71,10 @@ public class ProductServiceImpl implements ProductService {
        return (val==null)?0:val.intValue();
     }
 
+public int getSearchedProductCount(String username, String name){
+        Long val = productRepository.countAllByUsernameAndName( username,  name);
+    return (val==null)?0:val.intValue();
 
+}
 
 }
