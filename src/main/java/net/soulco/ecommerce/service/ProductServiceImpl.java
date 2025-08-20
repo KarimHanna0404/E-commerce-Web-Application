@@ -1,5 +1,6 @@
 package net.soulco.ecommerce.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.soulco.ecommerce.dto.ProductDto;
 import net.soulco.ecommerce.dto.UserDto;
@@ -47,12 +48,14 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.entityToDto(updated);
     }
 
+    //Everything is wrapped in a transaction using the Spring @Transactional, if everything succeeds -> transaction is committed and saved to the db
+    //if transaction does not go threw -> undo changes
     @Override
-    public void deleteProduct(Long id) {
-        if (!productRepository.existsById(id)) {
-            throw new RuntimeException("Product not found: " + id);
-        }
-        productRepository.deleteById(id);
+    @Transactional
+    public void deleteProduct(Long id, String username) {
+        Product product = productRepository.findByIdAndUsername(id, username)
+                .orElseThrow(() -> new RuntimeException("Product not found or not owned by user"));
+        productRepository.delete(product);
     }
 
     @Override

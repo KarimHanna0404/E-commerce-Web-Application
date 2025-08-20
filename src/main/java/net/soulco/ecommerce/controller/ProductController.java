@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import net.soulco.ecommerce.dto.ProductDto;
 import net.soulco.ecommerce.dto.UserDto;
 import net.soulco.ecommerce.service.ProductService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,8 +53,13 @@ public class ProductController {
 
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
+    @ResponseStatus(HttpStatus.NO_CONTENT) // 204
+    public void deleteProduct(@PathVariable Long id, HttpSession session) {
+        UserDto loggedUser = (UserDto) session.getAttribute("userData");
+        if (loggedUser == null) {
+            throw new RuntimeException("User is not logged in");
+        }
+        productService.deleteProduct(id, loggedUser.getUsername());
     }
 
 }

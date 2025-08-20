@@ -53,7 +53,6 @@ public class UserController {
     @PostMapping(value = "/logout", produces = "application/json")
     public ResponseEntity<ApiMessage> logout(HttpSession session) {
         userService.DeleteSession(session);
-        // 204 is also fine; using 200 + message for clarity
         return ResponseEntity.ok(new ApiMessage("Logged out"));
     }
 }
