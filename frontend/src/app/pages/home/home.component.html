@@ -16,8 +16,18 @@
 
   <div class="dashboard__stats">
     <div class="stat-card">
-      <span class="stat-card__number">{{ totalProducts }}</span>
+      <div class="grid grid-cols-2 gap-3 justify-content-between">
+<div class="w-full">
+      <span class="stat-card__number" >{{ totalProducts }}</span>
       <span class="stat-card__label">Total Products</span>
+</div>
+<div class="w-full">
+
+ <span class="stat-card__number">{{ searchedProducts }}</span>
+      <span class="stat-card__label">Searched Products</span>
+</div>
+      </div>
+      
     </div>
   </div>
 
@@ -50,6 +60,12 @@
     <button (click)="onEdit(product.id)">
       <i class="pi pi-pencil text-blue-500 text-2xl cursor-pointer"></i>
     </button>
+
+<button >
+  <i class="pi pi-cart-minus text-green-500 text-2xl cursor-pointer"></i>
+</button>
+
+
   </div>
 </ng-template>
 

@@ -33,20 +33,22 @@ export class HomepageComponent implements OnInit {
   onSearchProducts(_: any) {
     this.searchProducts();
   }
-
+  
+searchedProducts: number = 0;
   searchProducts() {
     let params: HttpParams = new HttpParams();
     if (this.searchText) {
       params = params.set('query', this.searchText);
     }
     this.http
-      .get<{ Products: Product[]; totalProducts: number }>(`http://localhost:8080/api/products/search`, {
+      .get<{ Products: Product[]; totalProducts: number ; searchedProducts: number}>(`http://localhost:8080/api/products/search`, {
         params,
         withCredentials: true,
       })
       .subscribe((data) => {
         this.products = data.Products;
         this.totalProducts = data.totalProducts;
+        this.searchedProducts = data.searchedProducts;
       });
   }
 
@@ -57,16 +59,14 @@ onEdit(id: number): void {
 
 
 deleteProduct(product: Product) {
-  if (confirm(`Delete product "${product.name}"?`)) {
-    this.http
-      .delete(`http://localhost:8080/api/products/${product.id}`, {
-        withCredentials: true,
-      })
-      .subscribe(() => {
-        this.products = this.products.filter((p) => p.id !== product.id);
-        this.totalProducts = this.products.length;
-      });
-  }
+  this.http
+    .delete(`http://localhost:8080/api/products/${product.id}`, {
+      withCredentials: true,
+    })
+    .subscribe(() => {
+      this.products = this.products.filter((p) => p.id !== product.id);
+      this.totalProducts = this.products.length;
+    });
 }
 
 }

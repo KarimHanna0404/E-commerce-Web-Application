@@ -31,8 +31,8 @@ import { AvatarModule } from 'primeng/avatar';
 import { CardModule } from 'primeng/card';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-
-
+import { CartService } from './services/cart.service';
+import { CartComponent } from './cart/cart.component';
 
 
 
@@ -74,9 +74,12 @@ import { InputIconModule } from 'primeng/inputicon';
     RegistrationComponent,
     CreateProductComponent,
     HomepageComponent,
+    CartComponent,
+
   ],
   providers: [
     MessageService,
+    CartService,
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),
