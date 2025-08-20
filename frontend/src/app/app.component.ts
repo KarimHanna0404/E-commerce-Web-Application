@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { MenuItem } from 'primeng/api';
+import { CartService } from './services/cart.service';
+
 
 @Component({
   selector: 'app-root',
@@ -13,10 +15,14 @@ export class AppComponent implements OnInit {
   showMenu = false;
   title = 'frontend';
   model: MenuItem[] = [];
+  cartCount = 0;
 
-  constructor(private router: Router) {}
+  constructor(private cartService: CartService, private router: Router) {}
 
   ngOnInit(): void {
+        this.cartService.cartCount$.subscribe((count) => {
+      this.cartCount = count;
+    });
     this.model = [
       { label: 'Homepage', icon: 'pi pi-home', routerLink: '/homepage' },
     ];
@@ -33,6 +39,10 @@ export class AppComponent implements OnInit {
 
     const styleTag = document.querySelector('[data-primeng-style-id="global-variables"]');
     console.log('Active theme CSS:', styleTag?.textContent?.slice(0, 500));
+  }
+
+    goToCart() {
+    this.router.navigate(['/cart']);
   }
 
   logout() {

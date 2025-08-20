@@ -1,0 +1,58 @@
+<div class="max-w-5xl mx-auto p-6 bg-white rounded-2xl shadow">
+    <div class="text-center mb-6">
+    <h2 class="text-2xl font-bold">Your cart total is {{ total | currency }}</h2>
+    <p class="text-gray-500">FREE SHIPPING AND RETURN</p>
+    <button
+      class="mt-3 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg shadow"
+    >
+      Check Out
+    </button>
+  </div>
+
+  <hr class="my-6" />
+
+  <div *ngFor="let item of cart" class="flex items-start gap-4 mb-6">
+    <img
+      [src]="item.image || 'https://via.placeholder.com/120'"
+      alt="{{ item.name }}"
+      class="w-28 h-28 object-cover rounded-lg shadow"
+    />
+
+    <div class="flex-1">
+      <h3 class="text-lg font-semibold">{{ item.name }}</h3>
+      <p class="text-gray-500">Medium</p>
+
+      <div class="mt-2 space-y-1 text-sm text-gray-600">
+        <p><i class="pi pi-envelope mr-1"></i> Order today.</p>
+        <p><i class="pi pi-send mr-1"></i> Delivery by <b>Dec 23</b>.</p>
+        <p><i class="pi pi-exclamation-triangle mr-1"></i> Only 8 Available.</p>
+      </div>
+    </div>
+
+    <div class="flex flex-col items-center">
+      <select
+        class="border rounded-lg px-2 py-1 text-sm"
+        [(ngModel)]="item.quantity"
+        (change)="updateQuantity(item)"
+      >
+        <option *ngFor="let q of [1,2,3,4,5,6,7,8,9,10]" [value]="q">
+          {{ q }}
+        </option>
+      </select>
+    </div>
+
+    <div class="flex flex-col items-end ml-4">
+      <p class="text-lg font-semibold">{{ item.price | currency }}</p>
+      <button
+        (click)="remove(item)"
+        class="text-pink-500 text-sm mt-2 hover:underline"
+      >
+        Remove
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="cart.length === 0" class="text-center text-gray-500">
+    Your cart is empty 🛍️
+  </div>
+</div>
