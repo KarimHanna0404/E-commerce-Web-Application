@@ -21,4 +21,6 @@ public interface ProductMapper {
     Product dtoToEntity(ProductDto productDto);
 
     void update(ProductDto productDto, @MappingTarget Product product);
+
+    void delete(ProductDto productDto, @MappingTarget Product product);
 }

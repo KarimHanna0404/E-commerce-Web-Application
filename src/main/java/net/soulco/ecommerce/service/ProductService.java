@@ -13,7 +13,8 @@ public interface ProductService {
 
    ProductDto updateProduct(Long id, ProductDto dto, String username);
 
-   void deleteProduct(Long id);
+    void deleteProduct(Long id, String username);
 
-   List<ProductDto> search(String username, String query);
+    List<ProductDto> search(String username, String query);
+
 }
