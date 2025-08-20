@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 import { FileUploadHandlerEvent } from 'primeng/fileupload';
 import { FileUpload } from 'primeng/fileupload';
-import { Router ,ActivatedRoute} from '@angular/router';
 
 interface Product {
   id: number;
@@ -18,24 +20,20 @@ interface Product {
   selector: 'app-create-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss'],
-  standalone: false,
+  standalone: false
 })
 export class CreateProductComponent implements OnInit {
-  @ViewChild('fileUpload') fileUpload?: FileUpload;
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
+   @ViewChild('fileUpload') fileUpload?: FileUpload;
   productForm: FormGroup;
   successMessage: string | null = null;
   errorMessage: string | null = null;
   products: Product[] = [];
-    productId: number | null = null;
-
   selectedImageBase64: string | null = null;
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(255)]],
-      image: [null, Validators.required],
+      imageUrl: [null, Validators.required],
       description: ['', Validators.maxLength(1000)],
       price: [0, [Validators.required, Validators.min(0.01)]],
       code: ['', [Validators.required, Validators.pattern(/^[A-Za-z0-9]+$/)]],
@@ -43,103 +41,80 @@ export class CreateProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.productId = Number(this.route.snapshot.paramMap.get('id')); 
-
-    if (this.productId) {
-      this.loadProduct(this.productId); 
-    }
+    this.loadProducts();
   }
 
-    private loadProduct(id: number): void {
-    this.http.get<Product>(`http://localhost:8080/api/products/${id}`, { withCredentials: true })
-      .subscribe({
-        next: (product) => {
-          this.productForm.patchValue(product);
-        },
-        error: () => {
-          this.errorMessage = 'Error loading product for edit.';
-        }
-      });
-  }
 
-  onFileChange(event: FileUploadHandlerEvent): void {
-    const file = event.files && event.files.length ? event.files[0] : null;
 
-    if (!file) {
-      return;
-    }
+onFileChange(event: FileUploadHandlerEvent): void {
+  const file = event.files && event.files.length ? event.files[0] : null;
 
-    const validImageTypes = ['image/png', 'image/jpeg'];
-
-    if (!validImageTypes.includes(file.type)) {
-      this.errorMessage = 'Please upload a PNG or JPG file.';
-      this.productForm.patchValue({ imageUrl: null });
-      this.selectedImageBase64 = null;
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.selectedImageBase64 = reader.result as string;
-      this.productForm.patchValue({ image: this.selectedImageBase64 });
-      this.errorMessage = null;
-    };
-    reader.readAsDataURL(file);
-  }
-
-async onSubmit(): Promise<void> {
-  if (this.productForm.invalid) {
-    this.productForm.markAllAsTouched();
-    this.errorMessage = 'Please fill all required fields correctly.';
+  if (!file) {
     return;
   }
 
-  const payload = this.productForm.value;
+  const validImageTypes = ['image/png', 'image/jpeg'];
 
-  try {
-    if (this.productId) {
+  if (!validImageTypes.includes(file.type)) {
+    this.errorMessage = 'Please upload a PNG or JPG file.';
+    this.productForm.patchValue({ imageUrl: null });
+    this.selectedImageBase64 = null;
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.selectedImageBase64 = reader.result as string;
+    this.productForm.patchValue({ imageUrl: this.selectedImageBase64 });
+    this.errorMessage = null;
+    
+  };
+  reader.readAsDataURL(file);
+}
+
+
+  
+
+  async onSubmit(): Promise<void> {
+    if (this.productForm.invalid) {
+      this.productForm.markAllAsTouched();
+      this.errorMessage = 'Please fill all required fields correctly.';
+      return;
+    }
+
+   
+ 
+    const payload = {
+      name: this.productForm.get('name')?.value,
+      imageUrl: this.productForm.get('imageUrl')?.value,
+      description: this.productForm.get('description')?.value,
+      price: this.productForm.get('price')?.value,
+      code: this.productForm.get('code')?.value,
+    };
+
+    try {
       const response = await this.http
-        .put<Product>(
-          `http://localhost:8080/api/products/${this.productId}`,
-          payload,
-          {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true,
-          }
-        )
+        .post<Product>('http://localhost:8080/api/products', payload, {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true,
+        })
         .toPromise();
-
-      this.successMessage = 'Product updated successfully!';
+      this.successMessage = 'Product created successfully!';
       this.errorMessage = null;
-    } else {
-      const response = await this.http
-        .post<Product>(
-          'http://localhost:8080/api/products',
-          payload,
-          {
-            headers: { 'Content-Type': 'application/json' },
-            withCredentials: true,
-          }
-        )
-        .toPromise();
+      this.productForm.reset();
+
+          this.selectedImageBase64 = null;
+
+    this.fileUpload?.clear();
 
       if (response) {
         this.products.push(response);
       }
-      this.successMessage = 'Product created successfully!';
-      this.errorMessage = null;
+    } catch (error: any) {
+      this.errorMessage = error.error?.message || 'Error creating product.';
+      this.successMessage = null;
     }
-
-    this.productForm.reset();
-    this.selectedImageBase64 = null;
-    this.fileUpload?.clear();
-    this.router.navigate(['/homepage']);
-  } catch (error: any) {
-    this.errorMessage = error.error?.message || 'Error saving product.';
-    this.successMessage = null;
   }
-}
-
 
   onCancel(): void {
     this.productForm.reset();
