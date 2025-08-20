@@ -29,6 +29,9 @@ import { HomepageComponent } from './pages/home/home.component';
 import { MenubarModule } from 'primeng/menubar';
 import { AvatarModule } from 'primeng/avatar';
 import { CardModule } from 'primeng/card';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+
 
 
 
@@ -61,9 +64,9 @@ import { CardModule } from 'primeng/card';
     MenubarModule,
     AvatarModule,
     CardModule,
-    ProgressBar
-  
-    
+    ProgressBar,
+    IconFieldModule,
+    InputIconModule
   ],
   declarations: [
     AppComponent,

@@ -101,9 +101,9 @@
       </div>
     </p-fileUpload>
 
-    @if(productForm.get('imageUrl')?.invalid &&
-    productForm.get('imageUrl')?.touched){
-    <p-message severity="error" variant="simple">*Image URL required</p-message>
+    @if(productForm.get('image')?.invalid &&
+    productForm.get('image')?.touched){
+    <p-message severity="error" variant="simple">*Image  required</p-message>
     }
 
     <button type="submit" class="btn btn-primary">Submit</button>
