@@ -1,0 +1,44 @@
+cart-container {
+  font-family: Arial, sans-serif;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.subtotal {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.empty-cart {
+  text-align: center;
+  color: #666;
+}
+
+.total {
+  margin-top: 20px;
+  text-align: right;
+}
+
+p-button {
+  margin: 0 5px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+}
+
+p-button:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+}
