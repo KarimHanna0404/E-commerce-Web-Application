@@ -37,7 +37,7 @@
     <div class="products-grid">
       <p-card *ngFor="let product of products" class="product-card">
         <ng-template #header>
-    <img [src]="product.image" alt="{{ product.name }}" class="product-img" />
+    <img [src]="product.imageUrl" alt="{{ product.name }}" class="product-img" />
 
         </ng-template>
         <ng-template #title>

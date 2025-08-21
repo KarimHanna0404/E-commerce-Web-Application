@@ -31,13 +31,13 @@
         </p-floatlabel>
         <p-message
           *ngIf="
-            productForm.get('code')?.hasError('required') &&
+            productForm.get('code')?.invalid &&
             productForm.get('code')?.touched
           "
           severity="error"
           variant="simple"
         >
-          *Code required
+          *Invalid code
         </p-message>
       </div>
     </div>
@@ -71,14 +71,13 @@
     <p-fileUpload
       #fileUpload
       name="image"
-      [customUpload]="true"
-      (uploadHandler)="onFileChange($event)"
+      (onSelect)="onFileChange($event)"
       [auto]="true"
-      [accept]="'image/png,image/jpeg'"
+      [accept]="'.jpg,.png,.jpeg'"
       [maxFileSize]="1048576"
-      [auto]="false"
-      [showUploadButton]="false"
-      [showCancelButton]="false"
+      invalidFileSizeMessageSummary="Invalid file size"
+      invalidFileSizeMessageDetail="Maximum upload size is {0}"
+      invalidFileTypeMessageSummary="Invalid file type"
       chooseLabel="Select Image"
       mode="advanced"
     >
@@ -97,16 +96,21 @@
         />
       </div>
 
-      <div *ngIf="errorMessage" style="color: red; margin-top: 0.5rem">
+      @if(errorMessage){
+      <div style="color: red; margin-top: 0.5rem">
         {{ errorMessage }}
       </div>
+      }
     </p-fileUpload>
 
     @if(productForm.get('imageUrl')?.invalid &&
     productForm.get('imageUrl')?.touched){
-    <p-message severity="error" variant="simple">*Image  required</p-message>
+    <p-message severity="error" variant="simple">*Image required</p-message>
     }
 
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
+
+  <p-toast />
+
 </div>

@@ -57,4 +57,8 @@
         </sql>
     </changeSet>
 
+    <changeSet id="alter-image-url-column-to-longtext" author="Karim Hanna">
+        <modifyDataType tableName="products" columnName="image_url" newDataType="LONGTEXT" />
+    </changeSet>
+
 </databaseChangeLog>

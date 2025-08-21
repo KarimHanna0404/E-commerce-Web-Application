@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 interface Product {
   id: number;
   name: string;
-  image: string;
+  imageUrl: string;
   description: string;
   price: number;
   code: string;
@@ -21,7 +21,7 @@ export class HomepageComponent implements OnInit {
   private router = inject(Router);
   totalProducts = 0;
   searchedProducts: number = 0;
-  products: any[] = [];
+  products: Product[] = [];
   searchText: string = '';
 
   constructor(private http: HttpClient) {}
@@ -73,6 +73,7 @@ export class HomepageComponent implements OnInit {
       .subscribe(() => {
         this.products = this.products.filter((p) => p.id !== product.id);
         this.searchedProducts = this.products.length;
+        this.totalProducts -= 1;
       });
   }
 }
