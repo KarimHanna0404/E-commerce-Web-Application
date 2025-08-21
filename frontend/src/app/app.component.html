@@ -31,6 +31,17 @@
     </a>
   </ng-template>
   <ng-template #end>
+
+    <button class="relative mr-4" (click)="goToCart()">
+      <i class="pi pi-shopping-cart text-2xl"></i>
+      <span
+        *ngIf="cartCount > 0"
+        class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2"
+      >
+        {{ cartCount }}
+      </span>
+    </button>
+
     <p-button
       label="Logout"
       severity="danger"

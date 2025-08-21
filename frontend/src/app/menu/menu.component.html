@@ -1,0 +1,29 @@
+<div class="cart-container" style="background-color: #f9f9f9; padding: 20px;">
+  <h2> shopping cart</h2>
+
+  
+  <div class="cart-item" *ngFor="let item of cartItems; let i = index">
+    <span>{{ item.name }}</span>
+    <p-inputNumber [(ngModel)]="item.quantity" [min]="1" [max]="10" (onInput)="updateSubtotal(i)"></p-inputNumber>
+    <p-button label="-" (onClick)="changeQuantity(i, -1)" style="margin-right: 5px;"></p-button>
+    <p-button label="+" (onClick)="changeQuantity(i, 1)"></p-button>
+    <span class="subtotal">total: {{ item.subtotal | currency:'USD' }}</span>
+    <p-button label="delate" (onClick)="removeItem(i)" style="margin-left: 10px;"></p-button>
+  </div>
+
+  
+  <div *ngIf="cartItems.length === 0" class="empty-cart">
+    <p> the cart is empty! <a href="#"> shopping now</a></p>
+  </div>
+
+  
+  <div class="total" *ngIf="cartItems.length > 0">
+    <h3> total : {{ total | currency:'USD' }}</h3>
+    <p-button label="request send" (onClick)="submitOrder()" style="background-color: #28a745; color: white;"></p-button>
+  </div>
+
+  
+  <p-dialog header="request success " [(visible)]="displayDialog" [modal]="true" [closable]="true">
+    <p> request number !  request has been sent successfully: {{ orderNumber }}</p>
+  </p-dialog>
+</div>

@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 interface Product {
   id: number;
   name: string;
-  imageUrl: string;
+  image: string;
   description: string;
   price: number;
   code: string;
@@ -17,10 +18,11 @@ interface Product {
   standalone: false,
 })
 export class HomepageComponent implements OnInit {
+    private router = inject(Router);
   totalProducts = 0;
 
   products: any[] = [];
-  searchText: string = ''; // <-- add this line
+  searchText: string = '';
 
   constructor(private http: HttpClient) {}
 
@@ -31,20 +33,40 @@ export class HomepageComponent implements OnInit {
   onSearchProducts(_: any) {
     this.searchProducts();
   }
-
+  
+searchedProducts: number = 0;
   searchProducts() {
     let params: HttpParams = new HttpParams();
     if (this.searchText) {
       params = params.set('query', this.searchText);
     }
     this.http
-      .get<Product[]>(`http://localhost:8080/api/products/search`, {
+      .get<{ Products: Product[]; totalProducts: number ; searchedProducts: number}>(`http://localhost:8080/api/products/search`, {
         params,
         withCredentials: true,
       })
       .subscribe((data) => {
-        this.products = data;
-        this.totalProducts = this.products?.length ?? 0;
+        this.products = data.Products;
+        this.totalProducts = data.totalProducts;
+        this.searchedProducts = data.searchedProducts;
       });
   }
+
+onEdit(id: number): void {
+  console.log(id);
+    this.router.navigate(['/products', id, 'edit']);
+}
+
+
+deleteProduct(product: Product) {
+  this.http
+    .delete(`http://localhost:8080/api/products/${product.id}`, {
+      withCredentials: true,
+    })
+    .subscribe(() => {
+      this.products = this.products.filter((p) => p.id !== product.id);
+      this.totalProducts = this.products.length;
+    });
+}
+
 }

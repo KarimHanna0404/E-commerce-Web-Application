@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ProductDto {
 
+    private Long id;
+
     @NotEmpty(message = "Do not leave Name field empty")
     @Size(max = 255, message = "Name must be at most 255 characters")
     private String name;

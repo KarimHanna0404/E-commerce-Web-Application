@@ -2,6 +2,7 @@ package net.soulco.ecommerce.service;
 
 import net.soulco.ecommerce.dto.ProductDto;
 import net.soulco.ecommerce.dto.UserDto;
+import net.soulco.ecommerce.model.Product;
 
 import java.util.List;
 
@@ -16,5 +17,9 @@ public interface ProductService {
     void deleteProduct(Long id, String username);
 
     List<ProductDto> search(String username, String query);
+
+    int getTotalProductCountForUser(String username);
+
+    int getSearchedProductCount(String username, String name);
 
 }

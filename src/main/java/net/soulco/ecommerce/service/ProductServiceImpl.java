@@ -64,4 +64,17 @@ public class ProductServiceImpl implements ProductService {
                 .stream().map(productMapper::entityToDto)
                 .toList();
     }
+
+    @Override
+    public int getTotalProductCountForUser(String username) {
+        Long count = productRepository.countAllByUsername(username);
+        return count == null ? 0 : count.intValue();
+    }
+
+    @Override
+    public int getSearchedProductCount(String username, String name) {
+        Long count = productRepository.countAllByUsernameAndName(username, name);
+        return count == null ? 0 : count.intValue();
+    }
+
 }

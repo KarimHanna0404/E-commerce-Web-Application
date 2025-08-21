@@ -29,7 +29,10 @@ import { HomepageComponent } from './pages/home/home.component';
 import { MenubarModule } from 'primeng/menubar';
 import { AvatarModule } from 'primeng/avatar';
 import { CardModule } from 'primeng/card';
-
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { CartService } from './services/cart.service';
+import { CartComponent } from './cart/cart.component';
 
 
 
@@ -61,9 +64,9 @@ import { CardModule } from 'primeng/card';
     MenubarModule,
     AvatarModule,
     CardModule,
-    ProgressBar
-  
-    
+    ProgressBar,
+    IconFieldModule,
+    InputIconModule
   ],
   declarations: [
     AppComponent,
@@ -71,9 +74,12 @@ import { CardModule } from 'primeng/card';
     RegistrationComponent,
     CreateProductComponent,
     HomepageComponent,
+    CartComponent,
+
   ],
   providers: [
     MessageService,
+    CartService,
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),

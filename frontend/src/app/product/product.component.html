@@ -73,6 +73,7 @@
       name="image"
       [customUpload]="true"
       (uploadHandler)="onFileChange($event)"
+      [auto]="true"
       [accept]="'image/png,image/jpeg'"
       [maxFileSize]="1048576"
       [auto]="false"
@@ -103,7 +104,7 @@
 
     @if(productForm.get('imageUrl')?.invalid &&
     productForm.get('imageUrl')?.touched){
-    <p-message severity="error" variant="simple">*Image URL required</p-message>
+    <p-message severity="error" variant="simple">*Image  required</p-message>
     }
 
     <button type="submit" class="btn btn-primary">Submit</button>
