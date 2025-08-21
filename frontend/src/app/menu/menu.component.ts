@@ -28,6 +28,6 @@ export class MenuBarComponent {
   }
 
   goToCart() {
-    console.log('انتقل إلى صفحة العربة');
+    console.log(' go to cart ');
   }
 }
