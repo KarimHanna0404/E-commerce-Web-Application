@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.soulco.ecommerce.dto.ProductDto;
 import net.soulco.ecommerce.dto.UserDto;
+import net.soulco.ecommerce.model.Product;
 import net.soulco.ecommerce.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -38,12 +39,12 @@ public class ProductController {
             throw new RuntimeException("User is not logged in");
         }
         List<ProductDto> productList= productService.search(loggedUser.getUsername(), query);
-        int allProducts=productService.getTotalProductCount();
+        int allProductsForUser=productService.getTotalProductCountForUser(loggedUser.getUsername());
         int searchedProducts = productService.getSearchedProductCount(loggedUser.getUsername(),query);
 
         Map<String, Object> response = new HashMap<>();
         response.put("Products",productList);
-        response.put("totalProducts",allProducts);
+        response.put("totalProducts",allProductsForUser);
         response.put("searchedProducts",searchedProducts );
         return response;
     }

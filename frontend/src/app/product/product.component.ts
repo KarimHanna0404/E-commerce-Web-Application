@@ -33,7 +33,7 @@ export class CreateProductComponent implements OnInit {
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(255)]],
-      image: [null, Validators.required],
+      imageUrl: [null, Validators.required],
       description: ['', Validators.maxLength(1000)],
       price: [0, [Validators.required, Validators.min(0.01)]],
       code: ['', [Validators.required, Validators.pattern(/^[A-Za-z0-9]+$/)]],
@@ -123,9 +123,16 @@ onFileChange(event: FileUploadHandlerEvent): void {
   }
 
   private loadProducts(): void {
-    this.http.get<Product[]>('http://localhost:8080/api/products').subscribe({
-      next: (products: Product[]) => (this.products = products),
-      error: () => (this.errorMessage = 'Error loading products.'),
-    });
+    this.http
+      .get<{ Products: Product[]; totalProducts: number; searchedProducts: number }>(
+        'http://localhost:8080/api/products/search',
+        { withCredentials: true }
+      )
+      .subscribe({
+        next: (res) => {
+          this.products = res.Products;
+        },
+        error: () => (this.errorMessage = 'Error loading products.'),
+      });
   }
 }
