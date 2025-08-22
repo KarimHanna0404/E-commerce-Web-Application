@@ -5,14 +5,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import net.soulco.ecommerce.dto.ProductDto;
 import net.soulco.ecommerce.dto.UserDto;
-import net.soulco.ecommerce.model.Product;
 import net.soulco.ecommerce.service.ProductService;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @RestController
@@ -32,21 +28,22 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public Map<String, Object> searchProducts(@RequestParam(required = false) String query, HttpSession session) {
+    public List<ProductDto> searchProducts(@RequestParam(required = false) String query, HttpSession session) {
         UserDto loggedUser = (UserDto) session.getAttribute("userData");
 
         if (loggedUser == null) {
             throw new RuntimeException("User is not logged in");
         }
-        List<ProductDto> productList= productService.search(loggedUser.getUsername(), query);
-        int allProductsForUser=productService.getTotalProductCountForUser(loggedUser.getUsername());
-        int searchedProducts = productService.getSearchedProductCount(loggedUser.getUsername(),query);
+        return productService.search(loggedUser.getUsername(), query);
+    }
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("Products",productList);
-        response.put("totalProducts",allProductsForUser);
-        response.put("searchedProducts",searchedProducts );
-        return response;
+    @GetMapping("/count")
+    public Long count(HttpSession session) {
+        UserDto loggedUser = (UserDto) session.getAttribute("userData");
+        if (loggedUser == null) {
+            throw new RuntimeException("User is not logged in");
+        }
+        return productService.countByUsername(loggedUser.getUsername());
     }
 
     @GetMapping("/{id}")
@@ -66,7 +63,6 @@ public class ProductController {
 
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT) // 204
     public void deleteProduct(@PathVariable Long id, HttpSession session) {
         UserDto loggedUser = (UserDto) session.getAttribute("userData");
         if (loggedUser == null) {
@@ -74,5 +70,4 @@ public class ProductController {
         }
         productService.deleteProduct(id, loggedUser.getUsername());
     }
-
 }

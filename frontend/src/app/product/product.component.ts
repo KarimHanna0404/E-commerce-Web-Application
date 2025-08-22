@@ -1,9 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { firstValueFrom } from 'rxjs';
 import { FileUploadHandlerEvent } from 'primeng/fileupload';
 import { FileUpload } from 'primeng/fileupload';
 import{Product}from '../models/product.model';
@@ -14,10 +12,10 @@ import { ProductService } from '../services/product.service';
   selector: 'app-create-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class CreateProductComponent implements OnInit {
-   @ViewChild('fileUpload') fileUpload?: FileUpload;
+  @ViewChild('fileUpload') fileUpload?: FileUpload;
   productForm: FormGroup;
   successMessage: string | null = null;
   errorMessage: string | null = null;
@@ -34,50 +32,38 @@ export class CreateProductComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.loadProducts();
+  ngOnInit(): void {}
+
+  onFileChange(event: FileUploadHandlerEvent): void {
+    const file = event.files && event.files.length ? event.files[0] : null;
+    if (!file) {
+      return;
+    }
+
+    const validImageTypes = ['image/png', 'image/jpeg'];
+
+    if (!validImageTypes.includes(file.type)) {
+      this.errorMessage = 'Please upload a PNG or JPG file.';
+      this.productForm.patchValue({ imageUrl: null });
+      this.selectedImageBase64 = null;
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.selectedImageBase64 = reader.result as string;
+      this.productForm.patchValue({ imageUrl: this.selectedImageBase64 });
+      this.errorMessage = null;
+    };
+    reader.readAsDataURL(file);
   }
-
-
-
-onFileChange(event: FileUploadHandlerEvent): void {
-  const file = event.files && event.files.length ? event.files[0] : null;
-
-  if (!file) {
-    return;
-  }
-
-  const validImageTypes = ['image/png', 'image/jpeg'];
-
-  if (!validImageTypes.includes(file.type)) {
-    this.errorMessage = 'Please upload a PNG or JPG file.';
-    this.productForm.patchValue({ imageUrl: null });
-    this.selectedImageBase64 = null;
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    this.selectedImageBase64 = reader.result as string;
-    this.productForm.patchValue({ imageUrl: this.selectedImageBase64 });
-    this.errorMessage = null;
-    
-  };
-  reader.readAsDataURL(file);
-}
-
-
-  
 
   async onSubmit(): Promise<void> {
     if (this.productForm.invalid) {
       this.productForm.markAllAsTouched();
-      this.errorMessage = 'Please fill all required fields correctly.';
       return;
     }
 
-   
- 
     const payload = {
       name: this.productForm.get('name')?.value,
       imageUrl: this.productForm.get('imageUrl')?.value,
@@ -100,14 +86,16 @@ onFileChange(event: FileUploadHandlerEvent): void {
         this.products.push(response);
       }
     } catch (error: any) {
-      this.errorMessage = error.error?.message || 'Error creating product.';
-      this.successMessage = null;
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Error creating product.',
+      });
     }
   }
 
   onCancel(): void {
     this.productForm.reset();
-    this.successMessage = null;
     this.errorMessage = null;
   }
 

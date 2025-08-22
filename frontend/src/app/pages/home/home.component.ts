@@ -1,11 +1,11 @@
-import { Component, OnInit,inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 interface Product {
   id: number;
   name: string;
-  image: string;
+  imageUrl: string;
   description: string;
   price: number;
   code: string;
@@ -18,55 +18,62 @@ interface Product {
   standalone: false,
 })
 export class HomepageComponent implements OnInit {
-    private router = inject(Router);
+  private router = inject(Router);
   totalProducts = 0;
-
-  products: any[] = [];
+  searchedProducts: number = 0;
+  products: Product[] = [];
   searchText: string = '';
 
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
+    this.getAllProductsCount();
     this.searchProducts();
   }
 
   onSearchProducts(_: any) {
     this.searchProducts();
   }
-  
-searchedProducts: number = 0;
+
+  getAllProductsCount() {
+    this.http
+      .get<number>(`http://localhost:8080/api/products/count`, {
+        withCredentials: true,
+      })
+      .subscribe((data) => {
+        this.totalProducts = data;
+      });
+  }
+
   searchProducts() {
     let params: HttpParams = new HttpParams();
     if (this.searchText) {
       params = params.set('query', this.searchText);
     }
     this.http
-      .get<{ Products: Product[]; totalProducts: number ; searchedProducts: number}>(`http://localhost:8080/api/products/search`, {
+      .get<Product[]>(`http://localhost:8080/api/products/search`, {
         params,
         withCredentials: true,
       })
       .subscribe((data) => {
-        this.products = data.Products;
-        this.totalProducts = data.totalProducts;
-        this.searchedProducts = data.searchedProducts;
+        this.products = data;
+        this.searchedProducts = data.length;
       });
   }
 
-onEdit(id: number): void {
-  console.log(id);
+  onEdit(id: number): void {
     this.router.navigate(['/products', id, 'edit']);
-}
+  }
 
-
-deleteProduct(product: Product) {
-  this.http
-    .delete(`http://localhost:8080/api/products/${product.id}`, {
-      withCredentials: true,
-    })
-    .subscribe(() => {
-      this.products = this.products.filter((p) => p.id !== product.id);
-      this.totalProducts = this.products.length;
-    });
-}
-
+  deleteProduct(product: Product) {
+    this.http
+      .delete(`http://localhost:8080/api/products/${product.id}`, {
+        withCredentials: true,
+      })
+      .subscribe(() => {
+        this.products = this.products.filter((p) => p.id !== product.id);
+        this.searchedProducts = this.products.length;
+        this.totalProducts -= 1;
+      });
+  }
 }
