@@ -51,13 +51,14 @@ export class HomepageComponent implements OnInit {
       params = params.set('query', this.searchText);
     }
     this.http
-      .get<Product[]>(`http://localhost:8080/api/products/search`, {
+      .get<{ Products: Product[]; totalProducts: number ; searchedProducts: number}>(`http://localhost:8080/api/products/search`, {
         params,
         withCredentials: true,
       })
       .subscribe((data) => {
-        this.products = data;
-        this.searchedProducts = data.length;
+         this.products = data.Products;
+        this.totalProducts = data.totalProducts;
+        this.searchedProducts = data.searchedProducts;
       });
   }
 

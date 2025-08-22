@@ -6,6 +6,9 @@ import { FileUploadHandlerEvent } from 'primeng/fileupload';
 import { FileUpload } from 'primeng/fileupload';
 import{Product}from '../models/product.model';
 import { ProductService } from '../services/product.service';
+import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
+
 
 
 @Component({
@@ -17,12 +20,21 @@ import { ProductService } from '../services/product.service';
 export class CreateProductComponent implements OnInit {
   @ViewChild('fileUpload') fileUpload?: FileUpload;
   productForm: FormGroup;
-  successMessage: string | null = null;
+    successMessage: string | null = null;
   errorMessage: string | null = null;
   products: Product[] = [];
   selectedImageBase64: string | null = null;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private productService: ProductService) {
+
+
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private messageService: MessageService,
+    private router: Router,
+    private productService: ProductService
+  ) {
+
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(255)]],
       imageUrl: [null, Validators.required],
@@ -73,18 +85,19 @@ export class CreateProductComponent implements OnInit {
     };
 
     try {
+
       const response = await this.productService.createProduct(payload);
       this.successMessage = 'Product created successfully!';
       this.errorMessage = null;
       this.productForm.reset();
 
-          this.selectedImageBase64 = null;
 
-    this.fileUpload?.clear();
-
-      if (response) {
-        this.products.push(response);
-      }
+        this.messageService.add({
+      severity: 'success',
+      summary: 'Success',
+      detail: 'Product created successfully',
+    });
+      this.router.navigate(['/homepage']);
     } catch (error: any) {
       this.messageService.add({
         severity: 'error',
@@ -99,6 +112,7 @@ export class CreateProductComponent implements OnInit {
     this.errorMessage = null;
   }
 
+
   private loadProducts(): void {
     
       this.productService.getProducts().subscribe({
@@ -108,4 +122,5 @@ export class CreateProductComponent implements OnInit {
         error: () => (this.errorMessage = 'Error loading products.'),
       });
   }
+
 }
