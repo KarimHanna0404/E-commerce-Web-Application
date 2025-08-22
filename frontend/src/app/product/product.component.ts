@@ -6,15 +6,9 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FileUploadHandlerEvent } from 'primeng/fileupload';
 import { FileUpload } from 'primeng/fileupload';
+import{Product}from '../models/product.model';
+import { ProductService } from '../services/product.service';
 
-interface Product {
-  id: number;
-  name: string;
-  image: string;
-  description: string;
-  price: number;
-  code: string;
-}
 
 @Component({
   selector: 'app-create-product',
@@ -30,7 +24,7 @@ export class CreateProductComponent implements OnInit {
   products: Product[] = [];
   selectedImageBase64: string | null = null;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private productService: ProductService) {
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(255)]],
       imageUrl: [null, Validators.required],
@@ -93,12 +87,7 @@ onFileChange(event: FileUploadHandlerEvent): void {
     };
 
     try {
-      const response = await this.http
-        .post<Product>('http://localhost:8080/api/products', payload, {
-          headers: { 'Content-Type': 'application/json' },
-          withCredentials: true,
-        })
-        .toPromise();
+      const response = await this.productService.createProduct(payload);
       this.successMessage = 'Product created successfully!';
       this.errorMessage = null;
       this.productForm.reset();
@@ -123,12 +112,8 @@ onFileChange(event: FileUploadHandlerEvent): void {
   }
 
   private loadProducts(): void {
-    this.http
-      .get<{ Products: Product[]; totalProducts: number; searchedProducts: number }>(
-        'http://localhost:8080/api/products/search',
-        { withCredentials: true }
-      )
-      .subscribe({
+    
+      this.productService.getProducts().subscribe({
         next: (res) => {
           this.products = res.Products;
         },
