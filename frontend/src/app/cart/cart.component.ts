@@ -1,30 +1,39 @@
-import { Component, OnInit } from '@angular/core';
-import { CartService, CartItem } from '../services/cart.service';
+import { Component } from '@angular/core';
+
+interface CartItem {
+  id: number;
+  name: string;
+  price: number;
+  image?: string;
+  quantity: number;
+}
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.scss'],
-  standalone:false,
+  styleUrls: ['./cart.component.scss']
 })
-export class CartComponent implements OnInit {
-  cart: CartItem[] = [];
+export class CartComponent {
+  cart: CartItem[] = [
+  ];
+
   total = 0;
 
-  constructor(private cartService: CartService) {}
-
-  ngOnInit() {
-    this.cartService.cartItems$.subscribe((items) => {
-      this.cart = items;
-      this.total = this.cartService.getTotal();
-    });
+  constructor() {
+    this.calculateTotal();
   }
 
   updateQuantity(item: CartItem) {
-    this.cartService.updateQuantity(item.id, item.quantity);
+    if (!item.quantity || item.quantity < 1) item.quantity = 1;
+    this.calculateTotal();
   }
 
   remove(item: CartItem) {
-    this.cartService.removeFromCart(item.id);
+    this.cart = this.cart.filter(c => c.id !== item.id);
+    this.calculateTotal();
+  }
+
+  private calculateTotal() {
+    this.total = this.cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
   }
 }
