@@ -2,11 +2,7 @@ package net.soulco.ecommerce.mapper;
 
 import net.soulco.ecommerce.dto.ProductDto;
 import net.soulco.ecommerce.model.Product;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
@@ -20,6 +16,7 @@ public interface ProductMapper {
 
     Product dtoToEntity(ProductDto productDto);
 
+    @BeanMapping(nullValuePropertyMappingStrategy =  NullValuePropertyMappingStrategy.IGNORE)
     void update(ProductDto productDto, @MappingTarget Product product);
 
     void delete(ProductDto productDto, @MappingTarget Product product);
