@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
 import { FileUploadHandlerEvent } from 'primeng/fileupload';
 import { FileUpload } from 'primeng/fileupload';
 import{Product}from '../models/product.model';
 import { ProductService } from '../services/product.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 
 
@@ -20,21 +20,23 @@ import { Router } from '@angular/router';
 export class CreateProductComponent implements OnInit {
   @ViewChild('fileUpload') fileUpload?: FileUpload;
   productForm: FormGroup;
-    successMessage: string | null = null;
+  successMessage: string | null = null;
   errorMessage: string | null = null;
   products: Product[] = [];
   selectedImageBase64: string | null = null;
+  productId: number | null = null; 
+  isEditMode: boolean = false;
 
 
 
-  constructor(
+constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private messageService: MessageService,
     private router: Router,
-    private productService: ProductService
+    private productService: ProductService,
+    private route: ActivatedRoute
   ) {
-
     this.productForm = this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(255)]],
       imageUrl: [null, Validators.required],
@@ -44,7 +46,35 @@ export class CreateProductComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.productId = Number(this.route.snapshot.paramMap.get('id'));
+    if (this.productId) {
+      this.isEditMode = true;
+      this.loadProduct(this.productId);
+    }
+  }
+
+    private loadProduct(id: number): void {
+    this.productService.getProductById(id).subscribe({
+      next: (product) => {
+        this.productForm.patchValue({
+          name: product.name,
+          code: product.code,
+          price: product.price,
+          description: product.description,
+          imageUrl: product.image,
+        });
+        this.selectedImageBase64 = product.image; 
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to load product.',
+        });
+      },
+    });
+  }
 
   onFileChange(event: FileUploadHandlerEvent): void {
     const file = event.files && event.files.length ? event.files[0] : null;
@@ -76,51 +106,38 @@ export class CreateProductComponent implements OnInit {
       return;
     }
 
-    const payload = {
-      name: this.productForm.get('name')?.value,
-      imageUrl: this.productForm.get('imageUrl')?.value,
-      description: this.productForm.get('description')?.value,
-      price: this.productForm.get('price')?.value,
-      code: this.productForm.get('code')?.value,
-    };
+    const payload = this.productForm.value;
 
     try {
-
-      const response = await this.productService.createProduct(payload);
-      this.successMessage = 'Product created successfully!';
-      this.errorMessage = null;
-      this.productForm.reset();
-
-
+      if (this.isEditMode && this.productId) {
+        await this.productService.updateProduct(this.productId, payload);
         this.messageService.add({
-      severity: 'success',
-      summary: 'Success',
-      detail: 'Product created successfully',
-    });
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Product updated successfully',
+        });
+      } else {
+        await this.productService.createProduct(payload);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Product created successfully',
+        });
+      }
+
       this.router.navigate(['/homepage']);
-    } catch (error: any) {
+    } catch (error) {
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
-        detail: 'Error creating product.',
+        detail: 'Error saving product.',
       });
     }
   }
-
   onCancel(): void {
     this.productForm.reset();
     this.errorMessage = null;
   }
 
-
-  private loadProducts(): void {
-    
-      this.productService.getProducts().subscribe({
-        next: (res) => {
-          this.products = res.Products;
-        },
-        error: () => (this.errorMessage = 'Error loading products.'),
-      });
-  }
 
 }

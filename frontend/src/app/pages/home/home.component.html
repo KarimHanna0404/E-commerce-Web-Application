@@ -1,4 +1,5 @@
 <div class="dashboard">
+  <!-- Header -->
   <div class="dashboard__header">
     <h1>Product Dashboard</h1>
     <button class="dashboard__add-btn" [routerLink]="'/products/new'">
@@ -17,17 +18,15 @@
   <div class="dashboard__stats">
     <div class="stat-card">
       <div class="grid grid-cols-2 gap-3 justify-content-between">
-<div class="w-full">
-      <span class="stat-card__number" >{{ totalProducts }}</span>
-      <span class="stat-card__label">Total Products</span>
-</div>
-<div class="w-full">
-
- <span class="stat-card__number">{{ searchedProducts }}</span>
-      <span class="stat-card__label">Searched Products</span>
-</div>
+        <div class="w-full">
+          <span class="stat-card__number">{{ totalProducts }}</span>
+          <span class="stat-card__label">Total Products</span>
+        </div>
+        <div class="w-full">
+          <span class="stat-card__number">{{ searchedProducts }}</span>
+          <span class="stat-card__label">Searched Products</span>
+        </div>
       </div>
-      
     </div>
   </div>
 
@@ -37,40 +36,36 @@
     <div class="products-grid">
       <p-card *ngFor="let product of products" class="product-card">
         <ng-template #header>
-    <img [src]="product.imageUrl" alt="{{ product.name }}" class="product-img" />
-
+          <img [src]="product.imageUrl" alt="{{ product.name }}" class="product-img" />
         </ng-template>
+
         <ng-template #title>
           <span class="product-title">{{ product.name }}</span>
         </ng-template>
+
         <ng-template #subtitle>
-          <span class="product-code">{{ product.code }}</span>
+          <span class="product-code">#{{ product.code }}</span>
         </ng-template>
 
-        <p class="product-description">{{ product.description }}</p>
+        <p class="product-description" [innerHTML]="product.safeDescription"></p>
+
         <p class="product-price">${{ product.price }}</p>
 
-<ng-template #footer>
-  <div class="flex gap-4 mt-1">
-    <button (click)="deleteProduct(product)">
-      <i class="pi pi-trash text-red-500 text-2xl cursor-pointer"></i>
-    </button>
+        <ng-template #footer>
+          <div class="flex gap-4 mt-1">
+            <button (click)="deleteProduct(product)">
+              <i class="pi pi-trash text-red-500 text-2xl cursor-pointer"></i>
+            </button>
 
+            <button (click)="onEdit(product.id)">
+              <i class="pi pi-pencil text-blue-500 text-2xl cursor-pointer"></i>
+            </button>
 
-    <button (click)="onEdit(product.id)">
-      <i class="pi pi-pencil text-blue-500 text-2xl cursor-pointer"></i>
-    </button>
-
-<button >
-  <i class="pi pi-cart-minus text-green-500 text-2xl cursor-pointer"></i>
-</button>
-
-
-  </div>
-</ng-template>
-
-
-
+            <button>
+              <i class="pi pi-cart-minus text-green-500 text-2xl cursor-pointer"></i>
+            </button>
+          </div>
+        </ng-template>
       </p-card>
     </div>
   </div>

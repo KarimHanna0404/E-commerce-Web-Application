@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 interface Product {
   id: number;
@@ -9,6 +10,7 @@ interface Product {
   description: string;
   price: number;
   code: string;
+  safeDescription?: SafeHtml; 
 }
 
 @Component({
@@ -24,7 +26,7 @@ export class HomepageComponent implements OnInit {
   products: Product[] = [];
   searchText: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     this.getAllProductsCount();
@@ -50,13 +52,18 @@ export class HomepageComponent implements OnInit {
     if (this.searchText) {
       params = params.set('query', this.searchText);
     }
+
     this.http
-      .get<{ Products: Product[]; totalProducts: number ; searchedProducts: number}>(`http://localhost:8080/api/products/search`, {
-        params,
-        withCredentials: true,
-      })
+      .get<{ Products: Product[]; totalProducts: number; searchedProducts: number }>(
+        `http://localhost:8080/api/products/search`,
+        { params, withCredentials: true }
+      )
       .subscribe((data) => {
-         this.products = data.Products;
+        this.products = data.Products.map((p) => ({
+          ...p,
+          safeDescription: this.sanitizer.bypassSecurityTrustHtml(p.description),
+        }));
+
         this.totalProducts = data.totalProducts;
         this.searchedProducts = data.searchedProducts;
       });
