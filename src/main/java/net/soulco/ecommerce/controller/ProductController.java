@@ -31,25 +31,14 @@ public class ProductController {
 
 
     @GetMapping("/search")
-    public Map<String, Object> searchProducts(@RequestParam(required = false) String query, HttpSession session) {
+    public List<ProductDto> searchProducts(@RequestParam(required = false) String query, HttpSession session) {
         UserDto loggedUser = (UserDto) session.getAttribute("userData");
 
         if (loggedUser == null) {
             throw new RuntimeException("User is not logged in");
         }
-        List<ProductDto> productList= productService.search(loggedUser.getUsername(), query);
-        long countbyUsername=productService.countByUsername(loggedUser.getUsername());
-        int searchedProducts = productService.getSearchedProductCount(loggedUser.getUsername(),query);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("Products",productList);
-        response.put("totalProducts",countbyUsername);
-        response.put("searchedProducts",searchedProducts );
-        return response;
+        return productService.search(loggedUser.getUsername(), query);
     }
-
-
-
 
 
     @GetMapping("/count")

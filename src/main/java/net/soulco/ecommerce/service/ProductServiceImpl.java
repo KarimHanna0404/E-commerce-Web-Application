@@ -65,13 +65,6 @@ public class ProductServiceImpl implements ProductService {
                 .toList();
     }
 
-@Override
-    public int getSearchedProductCount(String username, String name){
-        Long val = productRepository.countAllByUsernameAndName( username,  name);
-    return (val==null)?0:val.intValue();
-
-}
-
     @Override
     public Long countByUsername(String username) {
         return productRepository.countAllByUsername(username);

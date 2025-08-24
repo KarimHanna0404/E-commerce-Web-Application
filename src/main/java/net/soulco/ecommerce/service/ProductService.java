@@ -18,6 +18,4 @@ public interface ProductService {
     List<ProductDto> search(String username, String query);
 
     Long countByUsername(String username);
-
-    int getSearchedProductCount(String username, String name);
 }

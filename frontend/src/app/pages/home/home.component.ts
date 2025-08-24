@@ -60,18 +60,17 @@ export class HomepageComponent implements OnInit {
     }
 
     this.http
-      .get<{ Products: Product[]; totalProducts: number; searchedProducts: number }>(
+      .get<Product[]>(
         `http://localhost:8080/api/products/search`,
         { params, withCredentials: true }
       )
       .subscribe((data) => {
-        this.products = data.Products.map((p) => ({
+        this.products = data.map((p) => ({
           ...p,
           safeDescription: this.sanitizer.bypassSecurityTrustHtml(p.description),
         }));
 
-        this.totalProducts = data.totalProducts;
-        this.searchedProducts = data.searchedProducts;
+        this.searchedProducts = this.products.length;
       });
   }
 
