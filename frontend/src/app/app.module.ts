@@ -33,6 +33,9 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { CartService } from './services/cart.service';
 import { CartComponent } from './cart/cart.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 
 
 
@@ -66,7 +69,8 @@ import { CartComponent } from './cart/cart.component';
     CardModule,
     ProgressBar,
     IconFieldModule,
-    InputIconModule
+    InputIconModule,
+    BrowserAnimationsModule,
   ],
   declarations: [
     AppComponent,
