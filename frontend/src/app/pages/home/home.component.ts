@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CartService } from '../../services/cart.service';
+import { MessageService } from 'primeng/api';
+
 
 
 interface Product {
@@ -28,11 +30,23 @@ export class HomepageComponent implements OnInit {
   products: Product[] = [];
   searchText: string = '';
 
-  constructor(private http: HttpClient, private sanitizer: DomSanitizer, private cartService: CartService) {}
+  constructor(
+    private http: HttpClient,
+    private sanitizer: DomSanitizer,
+    private cartService: CartService,
+    private messageService: MessageService
+  ) {}
 
   addToCart(product: Product) {
-  this.cartService.addToCart(product, 1);
-  alert(`${product.name} added to cart!`);}
+    this.cartService.addToCart(product, 1);
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Added to Cart',
+      detail: `${product.name} has been added to your cart.`,
+      // controls how long toast is visible
+      life: 3000
+    });
+  }
 
   ngOnInit(): void {
     this.getAllProductsCount();
