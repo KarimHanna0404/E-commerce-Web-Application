@@ -21,7 +21,9 @@ export class CartService {
   private cartItems = new BehaviorSubject<CartItem[]>([]);
   cartItems$ = this.cartItems.asObservable();
 
-  constructor() {}
+  constructor() {
+    this.loadCart(); 
+  }
 
   addToCart(
     product: { id: number; name: string; price: number; imageUrl?: string },
@@ -75,10 +77,24 @@ export class CartService {
   private updateCartState() {
     this.cartCount.next(this.getCount());
     this.cartItems.next([...this.cart]);
+    this.saveCart(); 
   }
 
   private getCount(): number {
     return this.cart.reduce((sum, item) => sum + item.quantity, 0);
 
+
+  }
+
+  private saveCart() {
+    localStorage.setItem('cart', JSON.stringify(this.cart));
+  }
+
+  private loadCart() {
+    const data = localStorage.getItem('cart');
+    if (data) {
+      this.cart = JSON.parse(data);
+      this.updateCartState();
+    }
   }
 }
