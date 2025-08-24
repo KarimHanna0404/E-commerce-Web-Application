@@ -24,31 +24,25 @@ export class CartService {
 
   constructor() {}
 
-  addToCart(product: { id: number; name: string; price: number; imageUrl?: string }, quantity: number = 1) {
-    const existing = this.cart.find((item) => item.id === product.id);
+ addToCart(product: { id: number; name: string; price: number; imageUrl?: string }, quantity: number = 1) {
+  if (quantity <= 0) return;
 
-    if (quantity <=0){
-      return
-    }
+  const index = this.cart.findIndex(i => i.id === product.id);
 
-    const index = this.cart.findIndex(i => i.id === product.id);
-    // If item index found, update quantity
-    if(index>-1){
-      this.cart[index].quantity += quantity;
-      this.cart[index].quantity += quantity;
-      this.updateCartState();
-    }
-    else{
-      //if the item is not found, add it to the cart
-
-
-
-
-
-    }
-
-
+  if (index > -1) {
+    this.cart[index].quantity += quantity;
+  } else {
+    this.cart.push({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.imageUrl,
+      quantity: quantity
+    });
   }
+
+  this.updateCartState();
+}
 
   removeFromCart(productId: number) {
     this.cart = this.cart.filter((item) => item.id !== productId);

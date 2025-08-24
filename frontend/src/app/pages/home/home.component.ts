@@ -2,6 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { CartService } from '../../services/cart.service';
+
 
 interface Product {
   id: number;
@@ -26,7 +28,11 @@ export class HomepageComponent implements OnInit {
   products: Product[] = [];
   searchText: string = '';
 
-  constructor(private http: HttpClient, private sanitizer: DomSanitizer) {}
+  constructor(private http: HttpClient, private sanitizer: DomSanitizer, private cartService: CartService) {}
+
+  addToCart(product: Product) {
+  this.cartService.addToCart(product, 1);
+  alert(`${product.name} added to cart!`);}
 
   ngOnInit(): void {
     this.getAllProductsCount();
