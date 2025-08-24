@@ -43,7 +43,6 @@ export class HomepageComponent implements OnInit {
       severity: 'success',
       summary: 'Added to Cart',
       detail: `${product.name} has been added to your cart.`,
-      // controls how long toast is visible
       life: 3000
     });
   }
@@ -101,6 +100,7 @@ export class HomepageComponent implements OnInit {
         this.products = this.products.filter((p) => p.id !== product.id);
         this.searchedProducts = this.products.length;
         this.totalProducts -= 1;
+        this.cartService.removeFromCart(product.id);
       });
   }
 }

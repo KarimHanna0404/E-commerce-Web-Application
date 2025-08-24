@@ -6,8 +6,7 @@ export interface CartItem {
   name: string;
   price: number;
   quantity: number;
-    image?: string; 
-
+  image?: string; 
 }
 
 @Injectable({
@@ -24,25 +23,28 @@ export class CartService {
 
   constructor() {}
 
- addToCart(product: { id: number; name: string; price: number; imageUrl?: string }, quantity: number = 1) {
-  if (quantity <= 0) return;
+  addToCart(
+    product: { id: number; name: string; price: number; imageUrl?: string },
+    quantity: number = 1
+  ) {
+    if (quantity <= 0) return;
 
-  const index = this.cart.findIndex(i => i.id === product.id);
+    const index = this.cart.findIndex(i => i.id === product.id);
 
-  if (index > -1) {
-    this.cart[index].quantity += quantity;
-  } else {
-    this.cart.push({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.imageUrl,
-      quantity: quantity
-    });
+    if (index > -1) {
+      this.cart[index].quantity += quantity;
+    } else {
+      this.cart.push({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.imageUrl,
+        quantity: quantity
+      });
+    }
+
+    this.updateCartState();
   }
-
-  this.updateCartState();
-}
 
   removeFromCart(productId: number) {
     this.cart = this.cart.filter((item) => item.id !== productId);
@@ -77,5 +79,6 @@ export class CartService {
 
   private getCount(): number {
     return this.cart.reduce((sum, item) => sum + item.quantity, 0);
+
   }
 }
