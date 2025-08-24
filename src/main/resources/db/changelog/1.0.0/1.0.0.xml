@@ -6,4 +6,6 @@
 
     <include file="create-user-table.xml" relativeToChangelogFile="true"/>
     <include file="create-product-table.xml" relativeToChangelogFile="true"/>
+    <include file="create-order-table.xml" relativeToChangelogFile="true"/>
+    <include file="create-order-item-table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -39,4 +39,8 @@ public class Order {
     private BigDecimal totalAmount;
 
     private LocalDateTime orderDate;
+
+    public Object getUserId() {
+        return null;
+    }
 }
