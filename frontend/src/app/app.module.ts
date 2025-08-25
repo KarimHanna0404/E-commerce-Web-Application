@@ -34,7 +34,8 @@ import { InputIconModule } from 'primeng/inputicon';
 import { CartService } from './services/cart.service';
 import { CartComponent } from './cart/cart.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { OrderComponent } from './order/order.component';
+import { OrderService } from './services/order.service';
 
 
 
@@ -79,6 +80,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CreateProductComponent,
     HomepageComponent,
     CartComponent,
+    OrderComponent,
+    
 
   ],
   providers: [
@@ -98,7 +101,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     }),
 
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent,OrderService],
 })
 export class AppModule {
   constructor() {}

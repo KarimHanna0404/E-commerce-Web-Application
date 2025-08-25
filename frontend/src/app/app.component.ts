@@ -23,13 +23,16 @@ export class AppComponent implements OnInit {
         this.cartService.cartCount$.subscribe((count) => {
       this.cartCount = count;
     });
-    this.model = [
-      { label: 'Homepage', icon: 'pi pi-home', routerLink: '/homepage' },
-    ];
-
-    const setMenuVisibility = (url: string) => {
-      this.showMenu = url.startsWith('/homepage');
-    };
+    
+  this.model = [
+    { label: 'Homepage', icon: 'pi pi-home', routerLink: '/homepage' },
+    { label: 'Cart', icon: 'pi pi-shopping-cart', routerLink: '/cart' },
+    { label: 'orders', icon: 'pi pi-history', routerLink: 'orders/:id' },
+  ];
+  
+const setMenuVisibility = (url: string) => {
+  this.showMenu = !(url.startsWith('/login') || url.startsWith('/register'));
+};
 
     setMenuVisibility(this.router.url);
 

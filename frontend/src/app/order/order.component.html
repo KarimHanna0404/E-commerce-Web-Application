@@ -1,0 +1,35 @@
+<div class="search-bar">
+  <input [(ngModel)]="searchOrderNumber" placeholder="Search by Order Number" />
+  <input [(ngModel)]="searchProductName" placeholder="Search by Product Name" />
+  <input type="date" [(ngModel)]="fromDate" />
+  <input type="date" [(ngModel)]="toDate" />
+  <button (click)="applyFilters()">Search</button>
+  <button (click)="resetFilters()">Reset</button>
+</div>
+
+<table *ngIf="filteredOrders.length > 0; else noOrders" border="1" width="100%">
+  <thead>
+    <tr>
+      <th>Order #</th>
+      <th>Date</th>
+      <th>Total Amount</th>
+      <th>Items</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let order of filteredOrders">
+      <td>{{ order.identifier }}</td>
+      <td>{{ order.orderDate | date: 'short' }}</td>
+      <td>{{ order.totalAmount | currency }}</td>
+      <td>
+        <ul style="margin:0; padding-left:15px;">
+          <li *ngFor="let item of order.itemDetails">{{ item }}</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #noOrders>
+  <p style="text-align:center; margin-top:20px;">No orders found.</p>
+</ng-template>
