@@ -47,6 +47,8 @@ export class HomepageComponent implements OnInit {
     });
   }
 
+
+
   ngOnInit(): void {
     this.getAllProductsCount();
     this.searchProducts();

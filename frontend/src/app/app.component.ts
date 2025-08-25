@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
     });
 
   this.model = [
-    { label: 'Homepage', icon: 'pi pi-home', routerLink: '/homepage' },
+    { label: 'Home', icon: 'pi pi-home', routerLink: '/homepage' },
     { label: 'Cart', icon: 'pi pi-shopping-cart', routerLink: '/cart' },
   ];
   
