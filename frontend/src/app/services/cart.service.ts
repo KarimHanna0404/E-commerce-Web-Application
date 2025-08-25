@@ -25,28 +25,37 @@ export class CartService {
     this.loadCart(); 
   }
 
-  addToCart(
-    product: { id: number; name: string; price: number; imageUrl?: string },
-    quantity: number = 1
-  ) {
-    if (quantity <= 0) return;
+addToCart(
+  product: { id: number; name: string; price: number; imageUrl?: string },
+  quantity: number = 1
+): boolean {
+  if (quantity <= 0) return false;
 
-    const index = this.cart.findIndex(i => i.id === product.id);
+  const index = this.cart.findIndex(i => i.id === product.id);
 
-    if (index > -1) {
-      this.cart[index].quantity += quantity;
+  if (index > -1) {
+    if (this.cart[index].quantity + quantity > 100) {
+      // cap at 100
+      this.cart[index].quantity = 100;
+      this.updateCartState();
+      return false; // signal "not added"
     } else {
-      this.cart.push({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.imageUrl,
-        quantity: quantity
-      });
+      this.cart[index].quantity += quantity;
     }
-
-    this.updateCartState();
+  } else {
+    this.cart.push({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.imageUrl,
+      quantity: quantity > 100 ? 100 : quantity
+    });
   }
+
+  this.updateCartState();
+  return true; 
+}
+
 
   removeFromCart(productId: number) {
     this.cart = this.cart.filter((item) => item.id !== productId);
