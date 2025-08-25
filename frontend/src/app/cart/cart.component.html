@@ -25,24 +25,32 @@
       <div class="mt-2 space-y-1 text-sm text-gray-600">
         <p><i class="pi pi-envelope mr-1"></i> Order today.</p>
         <p><i class="pi pi-send mr-1"></i> Delivery by <b>Dec 23</b>.</p>
-        <p><i class="pi pi-exclamation-triangle mr-1"></i> Only 8 Available.</p>
       </div>
     </div>
 
-    <div class="flex flex-col items-center">
-      <select
-        class="border rounded-lg px-2 py-1 text-sm"
-        [(ngModel)]="item.quantity"
-        (change)="updateQuantity(item)"
-      >
-        <option *ngFor="let q of [1,2,3,4,5,6,7,8,9,10]" [value]="q">
-          {{ q }}
-        </option>
-      </select>
-    </div>
+<div class="cart-row">
+  <div class="cart-quantity">
+    <p-inputNumber
+      [(ngModel)]="item.quantity"
+      [min]="1"
+      [max]="100"
+      [showButtons]="true"
+      buttonLayout="horizontal"
+      spinnerMode="horizontal"
+      decrementButtonClass="p-button-secondary p-button-sm"
+      incrementButtonClass="p-button-secondary p-button-sm"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+      (onInput)="updateQuantity(item)"
+    ></p-inputNumber>
+  </div>
+</div>
+
+
+
 
     <div class="flex flex-col items-end ml-4">
-      <p class="text-lg font-semibold">{{ item.price | currency }}</p>
+      <p class="text-lg font-semibold">{{ item.price * item.quantity | currency }}</p>
       <button
         (click)="remove(item)"
         class="text-pink-500 text-sm mt-2 hover:underline"
