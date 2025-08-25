@@ -1,0 +1,38 @@
+.cart-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  .cart-info {
+    flex: 1; // product details take remaining space
+  }
+
+  .cart-quantity {
+    min-width: 140px; // reserve enough room for input + buttons
+    display: flex;
+    justify-content: center;
+
+    ::ng-deep .p-inputnumber {
+      width: 100%; // fill reserved space
+
+      input {
+        height: 32px;
+        font-size: 14px;
+        text-align: center;
+      }
+
+      .p-button {
+        height: 32px;
+        width: 28px;
+        font-size: 12px;
+      }
+    }
+  }
+
+  .cart-price {
+    width: 80px;
+    text-align: right;
+    white-space: nowrap; // prevents wrapping
+  }
+}

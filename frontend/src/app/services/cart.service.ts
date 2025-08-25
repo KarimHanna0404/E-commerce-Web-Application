@@ -6,8 +6,7 @@ export interface CartItem {
   name: string;
   price: number;
   quantity: number;
-    image?: string; 
-
+  image?: string; 
 }
 
 @Injectable({
@@ -22,27 +21,41 @@ export class CartService {
   private cartItems = new BehaviorSubject<CartItem[]>([]);
   cartItems$ = this.cartItems.asObservable();
 
-  constructor() {}
+  constructor() {
+    this.loadCart(); 
+  }
 
- addToCart(product: { id: number; name: string; price: number; imageUrl?: string }, quantity: number = 1) {
-  if (quantity <= 0) return;
+addToCart(
+  product: { id: number; name: string; price: number; imageUrl?: string },
+  quantity: number = 1
+): boolean {
+  if (quantity <= 0) return false;
 
   const index = this.cart.findIndex(i => i.id === product.id);
 
   if (index > -1) {
-    this.cart[index].quantity += quantity;
+    if (this.cart[index].quantity + quantity > 100) {
+      // cap at 100
+      this.cart[index].quantity = 100;
+      this.updateCartState();
+      return false; // signal "not added"
+    } else {
+      this.cart[index].quantity += quantity;
+    }
   } else {
     this.cart.push({
       id: product.id,
       name: product.name,
       price: product.price,
       image: product.imageUrl,
-      quantity: quantity
+      quantity: quantity > 100 ? 100 : quantity
     });
   }
 
   this.updateCartState();
+  return true; 
 }
+
 
   removeFromCart(productId: number) {
     this.cart = this.cart.filter((item) => item.id !== productId);
@@ -73,9 +86,24 @@ export class CartService {
   private updateCartState() {
     this.cartCount.next(this.getCount());
     this.cartItems.next([...this.cart]);
+    this.saveCart(); 
   }
 
   private getCount(): number {
     return this.cart.reduce((sum, item) => sum + item.quantity, 0);
+
+
+  }
+
+  private saveCart() {
+    localStorage.setItem('cart', JSON.stringify(this.cart));
+  }
+
+  private loadCart() {
+    const data = localStorage.getItem('cart');
+    if (data) {
+      this.cart = JSON.parse(data);
+      this.updateCartState();
+    }
   }
 }

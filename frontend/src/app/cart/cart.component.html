@@ -2,11 +2,13 @@
     <div class="text-center mb-6">
     <h2 class="text-2xl font-bold">Your cart total is {{ total | currency }}</h2>
     <p class="text-gray-500">FREE SHIPPING AND RETURN</p>
-    <button
-      class="mt-3 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg shadow"
-    >
-      Check Out
-    </button>
+<button
+  class="mt-3 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg shadow disabled:opacity-50 disabled:cursor-not-allowed"
+  [disabled]="cart.length === 0"
+>
+  Check Out
+</button>
+
   </div>
 
   <hr class="my-6" />
@@ -25,24 +27,32 @@
       <div class="mt-2 space-y-1 text-sm text-gray-600">
         <p><i class="pi pi-envelope mr-1"></i> Order today.</p>
         <p><i class="pi pi-send mr-1"></i> Delivery by <b>Dec 23</b>.</p>
-        <p><i class="pi pi-exclamation-triangle mr-1"></i> Only 8 Available.</p>
       </div>
     </div>
 
-    <div class="flex flex-col items-center">
-      <select
-        class="border rounded-lg px-2 py-1 text-sm"
-        [(ngModel)]="item.quantity"
-        (change)="updateQuantity(item)"
-      >
-        <option *ngFor="let q of [1,2,3,4,5,6,7,8,9,10]" [value]="q">
-          {{ q }}
-        </option>
-      </select>
-    </div>
+<div class="cart-row">
+  <div class="cart-quantity">
+    <p-inputNumber
+      [(ngModel)]="item.quantity"
+      [min]="1"
+      [max]="100"
+      [showButtons]="true"
+      buttonLayout="horizontal"
+      spinnerMode="horizontal"
+      decrementButtonClass="p-button-secondary p-button-sm"
+      incrementButtonClass="p-button-secondary p-button-sm"
+      incrementButtonIcon="pi pi-plus"
+      decrementButtonIcon="pi pi-minus"
+      (onInput)="updateQuantity(item)"
+    ></p-inputNumber>
+  </div>
+</div>
+
+
+
 
     <div class="flex flex-col items-end ml-4">
-      <p class="text-lg font-semibold">{{ item.price | currency }}</p>
+      <p class="text-lg font-semibold">{{ item.price * item.quantity | currency }}</p>
       <button
         (click)="remove(item)"
         class="text-pink-500 text-sm mt-2 hover:underline"
@@ -53,6 +63,6 @@
   </div>
 
   <div *ngIf="cart.length === 0" class="text-center text-gray-500">
-    Your cart is empty 🛍️
+    Your cart is empty 
   </div>
 </div>

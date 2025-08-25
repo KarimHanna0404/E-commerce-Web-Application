@@ -37,16 +37,28 @@ export class HomepageComponent implements OnInit {
     private messageService: MessageService
   ) {}
 
-  addToCart(product: Product) {
-    this.cartService.addToCart(product, 1);
+addToCart(product: Product) {
+  const added = this.cartService.addToCart(product, 1);
+
+  if (added) {
     this.messageService.add({
       severity: 'success',
       summary: 'Added to Cart',
       detail: `${product.name} has been added to your cart.`,
-      // controls how long toast is visible
+      life: 3000
+    });
+  } else {
+    this.messageService.add({
+      severity: 'warn', 
+      summary: 'Limit Reached',
+      detail: `${product.name} already reached the max limit (100).`,
       life: 3000
     });
   }
+}
+
+
+
 
   ngOnInit(): void {
     this.getAllProductsCount();
@@ -101,6 +113,7 @@ export class HomepageComponent implements OnInit {
         this.products = this.products.filter((p) => p.id !== product.id);
         this.searchedProducts = this.products.length;
         this.totalProducts -= 1;
+        this.cartService.removeFromCart(product.id);
       });
   }
 }
