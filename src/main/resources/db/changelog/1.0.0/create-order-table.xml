@@ -5,20 +5,31 @@
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <changeSet id="create-order-table" author="mohamed mamdouh">
-        <createTable tableName="ORDER">
-            <column name="id" type="int" autoIncrement="true">
+        <createTable tableName="order">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="unique_identifier" type="varchar(64)">
+            <column name="user_id" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="order_date" type="time">
+            <column name="identifier" type="varchar(64)">
+                <constraints nullable="false" uniqueConstraintName="uk_order_identifier"/>
+            </column>
+            <column name="order_date" type="datetime">
                 <constraints nullable="false"/>
             </column>
-            <column name="total_amount" type="decimal">
+            <column name="total_amount" type="decimal(10, 2)">
                 <constraints nullable="false"/>
             </column>
-
         </createTable>
     </changeSet>
+
+    <changeSet id="add-user-foreign-key-in-order-table" author="meladhanna">
+        <addForeignKeyConstraint constraintName="fk_order_user"
+                                 baseTableName="order"
+                                 baseColumnNames="user_id"
+                                 referencedTableName="user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
 </databaseChangeLog>

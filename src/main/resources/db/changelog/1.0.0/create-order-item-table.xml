@@ -6,22 +6,37 @@
 
     <changeSet id="creat-order-item-table" author="mohamed mamdouh">
         <createTable tableName="order_item">
-            <column name="id" type="int" autoIncrement="true">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="true"/>
             </column>
-            <column name="quantity" type="integer">
+            <column name="order_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="total_amount" type="decimal">
+            <column name="product_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="order_id" type="int">
+            <column name="quantity" type="int">
                 <constraints nullable="false"/>
             </column>
-            <column name="product_id" type="int">
+            <column name="total_amount" type="decimal(10, 2)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
 
+    <changeSet id="add-order-foreign-key-in-order-item-table" author="meladhanna">
+        <addForeignKeyConstraint constraintName="fk_order_item_order"
+                                 baseTableName="order_item"
+                                 baseColumnNames="order_id"
+                                 referencedTableName="order"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="add-product-foreign-key-in-order-item-table" author="meladhanna">
+        <addForeignKeyConstraint constraintName="fk_order_item_product"
+                                 baseTableName="order_item"
+                                 baseColumnNames="product_id"
+                                 referencedTableName="products"
+                                 referencedColumnNames="id"/>
     </changeSet>
 </databaseChangeLog>
