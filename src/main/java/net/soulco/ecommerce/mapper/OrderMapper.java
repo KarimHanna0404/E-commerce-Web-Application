@@ -17,7 +17,7 @@ public interface OrderMapper {
     // Keep plural to match service call
     List<OrderDto> entitiesToDtos(List<Order> orders);
 
-    @Mapping(target = "productName", source = "product.name")
+    @Mapping(target = "productDto", source = "product")
     OrderItemDto entityToDto(OrderItem orderItem);
 }
 
