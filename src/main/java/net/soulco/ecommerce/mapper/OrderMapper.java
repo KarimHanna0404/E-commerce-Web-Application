@@ -10,9 +10,11 @@ import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface OrderMapper {
+
     @Mapping(target = "orderItems", source = "orderItems")
     OrderDto entityToDto(Order order);
 
+    // Keep plural to match service call
     List<OrderDto> entitiesToDtos(List<Order> orders);
 
     @Mapping(target = "productName", source = "product.name")

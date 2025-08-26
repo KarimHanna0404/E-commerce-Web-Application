@@ -1,8 +1,14 @@
 package net.soulco.ecommerce.controller;
 
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import net.soulco.ecommerce.dto.CreateOrderRequest;
 import net.soulco.ecommerce.dto.OrderDto;
+import net.soulco.ecommerce.dto.UserDto;
 import net.soulco.ecommerce.service.OrderService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +24,21 @@ public class OrderController {
     // TODO: USE HttpSession NOT userId
     @GetMapping
     public List<OrderDto> getOrdersByUser(@PathVariable Long userId) {
+
         return orderService.getOrdersByUserId(userId);
     }
 
     // TODO: CREATE ORDER create(@RequestBody OrderDto order) => GENERATE IDENTIFIER UUID
+
+    public ResponseEntity<OrderDto> create(@Valid @RequestBody CreateOrderRequest request, HttpSession session) {
+        UserDto loggedUser = (UserDto) session.getAttribute("userData");
+
+        if (loggedUser == null) {
+            throw new RuntimeException("User is not logged in");
+        }
+        OrderDto created = orderService.createOrder(loggedUser.getId(), request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+
 }
