@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
         this.cartService.cartCount$.subscribe((count) => {
       this.cartCount = count;
     });
-<<<<<<< HEAD
+
     
   this.model = [
     { label: 'Homepage', icon: 'pi pi-home', routerLink: '/homepage' },
@@ -34,16 +34,7 @@ export class AppComponent implements OnInit {
 const setMenuVisibility = (url: string) => {
   this.showMenu = !(url.startsWith('/login') || url.startsWith('/register'));
 };
-=======
-    this.model = [
-      { label: 'Homepage', icon: 'pi pi-home', routerLink: '/homepage' },
-    ];
 
-    const setMenuVisibility = (url: string) => {
-      this.showMenu = ['/homepage', '/cart']
-        .some(prefix => url.startsWith(prefix));
-    };
->>>>>>> 7d183eb ("menu shows up in the cart page")
 
     setMenuVisibility(this.router.url);
 
