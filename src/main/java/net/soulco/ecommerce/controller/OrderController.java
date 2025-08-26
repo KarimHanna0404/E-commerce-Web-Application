@@ -15,8 +15,11 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @GetMapping("/user/{userId}")
+    // TODO: USE HttpSession NOT userId
+    @GetMapping
     public List<OrderDto> getOrdersByUser(@PathVariable Long userId) {
         return orderService.getOrdersByUserId(userId);
     }
+
+    // TODO: CREATE ORDER create(@RequestBody OrderDto order) => GENERATE IDENTIFIER UUID
 }

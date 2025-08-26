@@ -1,10 +1,9 @@
 package net.soulco.ecommerce.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 
@@ -12,6 +11,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ProductDto {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
 
     @NotEmpty(message = "Do not leave Name field empty")
@@ -31,7 +31,5 @@ public class ProductDto {
     @NotBlank(message = "Code is required")
     @Pattern(regexp = "^[A-Za-z0-9]+$", message = "Code must contain only letters and digits")
     private String code;
-
-
 }
 

@@ -6,15 +6,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderItemDto {
-    private String productName;
+    // TODO: Better Approach To Use ProductDto
+    private ProductDto productDto;
     private Integer quantity;
     private BigDecimal totalAmount;
 }
-
