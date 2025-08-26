@@ -33,6 +33,10 @@ public class OrderController {
 
     // TODO: CREATE ORDER create(@RequestBody OrderDto order) => GENERATE IDENTIFIER UUID
 
+
+
+
+    @PostMapping
     public ResponseEntity<OrderDto> create(@Valid @RequestBody CreateOrderRequest request, HttpSession session) {
         UserDto loggedUser = (UserDto) session.getAttribute("userData");
 
