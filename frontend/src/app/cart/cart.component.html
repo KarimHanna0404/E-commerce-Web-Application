@@ -4,10 +4,12 @@
     <p class="text-gray-500">FREE SHIPPING AND RETURN</p>
 <button
   class="mt-3 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg shadow disabled:opacity-50 disabled:cursor-not-allowed"
-  [disabled]="cart.length === 0" [routerLink]="'/orders/:id'"
+  [disabled]="cart.length === 0"
+  (click)="checkout()"
 >
   Check Out
 </button>
+
 
   </div>
 
