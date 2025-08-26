@@ -14,7 +14,7 @@ export const routes: Routes = [
   { path: 'products/new', component: CreateProductComponent },
   { path: 'homepage', component: HomepageComponent },
   { path: 'cart', component: CartComponent },
-  { path: 'orders/:id', component: OrderComponent },
+  { path: 'orders', component: OrderComponent },
 
 
   { path: '**', redirectTo: '/login' },

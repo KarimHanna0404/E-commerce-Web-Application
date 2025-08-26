@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { OrderService } from '../services/order.service';
-import { ActivatedRoute } from '@angular/router';
+import { OrderService, Order } from '../services/order.service';
 
 @Component({
   selector: 'app-order',
@@ -9,37 +8,28 @@ import { ActivatedRoute } from '@angular/router';
   standalone: false,
 })
 export class OrderComponent implements OnInit {
-  orders: any[] = [];
-  filteredOrders: any[] = [];
+  orders: Order[] = [];
+  filteredOrders: Order[] = [];
 
   searchOrderNumber: string = '';
   searchProductName: string = '';
   fromDate: string = '';
   toDate: string = '';
-  userId!: number;
 
-  constructor(private orderService: OrderService, private route: ActivatedRoute) {}
+  constructor(private orderService: OrderService) {}
 
   ngOnInit(): void {
-    const paramValue = this.route.snapshot.paramMap.get('id');
-    this.userId = Number(paramValue);
-
-    if (!this.userId) {
-      console.error('No userId found in route!');
-      return;
-    }
-
-    this.orderService.getOrdersByUser(this.userId).subscribe({
+    this.orderService.getOrders().subscribe({
       next: (data) => {
-        this.orders = data.map((order: any) => {
+        // Map itemDetails for display
+        this.orders = data.map(order => {
           const itemDetails = order.orderItems?.map(
-            (item: any) => `${item.productName} (x${item.quantity})`
+            item => `${item.productDto.name} (x${item.quantity})`
           ) || [];
 
           return {
             ...order,
-            itemDetails,
-            totalAmount: order.totalAmount 
+            itemDetails
           };
         });
 
@@ -56,14 +46,14 @@ export class OrderComponent implements OnInit {
   }
 
   applyFilters(): void {
-    this.filteredOrders = this.orders.filter((order) => {
+    this.filteredOrders = this.orders.filter(order => {
       const matchesOrderNumber = this.searchOrderNumber
-        ? order.identifier?.toString().toLowerCase().includes(this.searchOrderNumber.toLowerCase())
+        ? order.identifier?.toLowerCase().includes(this.searchOrderNumber.toLowerCase())
         : true;
 
       const matchesProduct = this.searchProductName
-        ? order.orderItems?.some((item: any) =>
-            item.productName?.toLowerCase().includes(this.searchProductName.toLowerCase())
+        ? order.orderItems?.some(item =>
+            item.productDto.name?.toLowerCase().includes(this.searchProductName.toLowerCase())
           )
         : true;
 

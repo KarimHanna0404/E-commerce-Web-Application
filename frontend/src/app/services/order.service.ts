@@ -2,11 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export interface OrderItem {
+export interface Product {
   id: number;
-  productName: string;
-  quantity: number;
+  name: string;
   price: number;
+}
+
+export interface OrderItem {
+  productDto: Product;
+  quantity: number;
+  totalAmount: number;
 }
 
 export interface Order {
@@ -15,17 +20,18 @@ export interface Order {
   totalAmount: number;
   orderDate: string;
   orderItems: OrderItem[];
+  itemDetails?: string[];
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
-  private apiUrl = 'http://localhost:8080/api/orders';
+  private apiUrl = 'http://localhost:8080/api/orders'; 
 
   constructor(private http: HttpClient) {}
 
-  getOrdersByUser(userId: number): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.apiUrl}/user/${userId}`);
+  getOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(this.apiUrl, { withCredentials: true });
   }
 }

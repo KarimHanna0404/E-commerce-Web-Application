@@ -1,10 +1,26 @@
 <div class="search-bar">
-  <input [(ngModel)]="searchOrderNumber" placeholder="Search by Order Number" />
-  <input [(ngModel)]="searchProductName" placeholder="Search by Product Name" />
-  <input type="date" [(ngModel)]="fromDate" />
-  <input type="date" [(ngModel)]="toDate" />
-  <button (click)="applyFilters()">Search</button>
-  <button (click)="resetFilters()">Reset</button>
+  <div class="input-group">
+    <label for="orderNumber">Order #</label>
+    <input id="orderNumber" [(ngModel)]="searchOrderNumber" placeholder="Search by Order Number" />
+  </div>
+
+  <div class="input-group">
+    <label for="productName">Product</label>
+    <input id="productName" [(ngModel)]="searchProductName" placeholder="Search by Product Name" />
+  </div>
+
+  <div class="input-group">
+    <label for="fromDate">From</label>
+    <input id="fromDate" type="date" [(ngModel)]="fromDate" />
+  </div>
+
+  <div class="input-group">
+    <label for="toDate">To</label>
+    <input id="toDate" type="date" [(ngModel)]="toDate" />
+  </div>
+
+  <button class="search-btn" (click)="applyFilters()">Search</button>
+  <button class="reset-btn" (click)="resetFilters()">Reset</button>
 </div>
 
 <table *ngIf="filteredOrders.length > 0; else noOrders" border="1" width="100%">
