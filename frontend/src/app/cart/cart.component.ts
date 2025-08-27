@@ -39,7 +39,10 @@ checkout() {
 
   const orderRequest = {
     totalAmount: this.total,
-    cartItemIds: this.cart.map(item => item.id) 
+    items: this.cart.map(item => ({
+      productId: item.id, 
+      quantity: item.quantity
+    }))
   };
 
   this.http.post('http://localhost:8080/api/orders', orderRequest, { withCredentials: true })
@@ -54,4 +57,5 @@ checkout() {
       }
     });
 }
+
 }
