@@ -23,9 +23,12 @@ public class OrderController {
 
     // TODO: USE HttpSession NOT userId
     @GetMapping
-    public List<OrderDto> getOrdersByUser(@PathVariable Long userId) {
-
-        return orderService.getOrdersByUserId(userId);
+    public List<OrderDto> getOrdersByUser(HttpSession session) {
+        UserDto loggedUser = (UserDto) session.getAttribute("userData");
+        if (loggedUser == null) {
+            throw new RuntimeException("User is not logged in");
+        }
+        return orderService.getOrdersByUserId(loggedUser.getId());
     }
 
     // TODO: CREATE ORDER create(@RequestBody OrderDto order) => GENERATE IDENTIFIER UUID

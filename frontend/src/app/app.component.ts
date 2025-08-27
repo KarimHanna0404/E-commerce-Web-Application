@@ -23,11 +23,11 @@ export class AppComponent implements OnInit {
       this.cartCount = count;
     });
 
-    this.model = [
-      { label: 'Home', icon: 'pi pi-home', routerLink: '/homepage' },
-      { label: 'Cart', icon: 'pi pi-shopping-cart', routerLink: '/cart' },
-      { label: 'Orders', icon: 'pi pi-history', routerLink: 'orders/:id' },
-    ];
+this.model = [
+  { label: 'Home', icon: 'pi pi-home', routerLink: '/homepage' },
+  { label: 'Cart', icon: 'pi pi-shopping-cart', routerLink: '/cart' },
+  { label: 'Orders', icon: 'pi pi-history', routerLink: '/orders' }, 
+];
 
     const setMenuVisibility = (url: string) => {
       this.showMenu = !(

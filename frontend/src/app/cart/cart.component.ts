@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { CartService, CartItem } from '../services/cart.service';
 
 @Component({
@@ -11,7 +13,11 @@ export class CartComponent implements OnInit {
   cart: CartItem[] = [];
   total = 0;
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.cartService.cartItems$.subscribe(items => {
@@ -27,4 +33,25 @@ export class CartComponent implements OnInit {
   remove(item: CartItem) {
     this.cartService.removeFromCart(item.id);
   }
+
+checkout() {
+  if (this.cart.length === 0) return;
+
+  const orderRequest = {
+    totalAmount: this.total,
+    cartItemIds: this.cart.map(item => item.id) 
+  };
+
+  this.http.post('http://localhost:8080/api/orders', orderRequest, { withCredentials: true })
+    .subscribe({
+      next: (createdOrder: any) => {
+        this.cartService.clearCart();
+        this.router.navigate(['/orders']);
+      },
+      error: (err) => {
+        console.error('Failed to create order', err);
+        alert('Failed to create order. Please try again.');
+      }
+    });
+}
 }
