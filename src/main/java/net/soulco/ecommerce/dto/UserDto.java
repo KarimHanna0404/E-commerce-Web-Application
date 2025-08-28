@@ -15,10 +15,12 @@ public class UserDto {
 
     // required
     @NotEmpty(message = "Email is required")
+    // TODO: HANDLE WITH PATTERN @Pattern
     private String email;
 
     // required
     @NotEmpty(message = "Password is required")
+    // TODO: HANDLE WITH PATTERN @Pattern
     private String password;
 
     // required

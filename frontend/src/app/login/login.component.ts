@@ -34,7 +34,7 @@ export class LoginComponent {
         .pipe(
           catchError((error) => {
             this.loginError =
-              error.error?.Message || 'Username or Password invaild';
+              error.error?.message || 'Username or Password invaild';
             return throwError(() => error);
           })
         )

@@ -24,6 +24,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto createProduct(ProductDto dto, UserDto userDto) {
+        // TODO: CHECK IF PRODUCT EXISTS THEN THROW CLEAR MESSAGE TO USER
         Product product = productMapper.dtoToEntity(dto);
         product.setUser(userMapper.dtoToEntity(userDto));
         Product saved = productRepository.save(product);

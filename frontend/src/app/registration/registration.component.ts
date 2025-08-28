@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import {
   FormBuilder,
   Validators,
@@ -7,7 +7,7 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -22,17 +22,16 @@ function matchPasswords(group: AbstractControl): ValidationErrors | null {
   selector: 'app-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss'],
-  standalone: false
+  standalone: false,
 })
-
 export class RegistrationComponent {
-
   items: MenuItem[] = [
     { label: 'Products', icon: 'pi pi-box', routerLink: '/products' },
   ];
 
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
+  private messageService = inject(MessageService);
   router = inject(Router);
   errorMessage: string | null = null;
 
@@ -62,16 +61,24 @@ export class RegistrationComponent {
     };
 
     this.http
-      .post('http://localhost:8080/api/user/register', payload, {
-        responseType: 'text',
-      })
+      .post('http://localhost:8080/api/user/register', payload)
       .subscribe({
         next: (res) => {
-          console.log('registration successful:', res);
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: 'User registered successfully',
+          });
           this.router.navigate(['login']);
         },
-        error: (err) => {
-          console.error('Registered failed:', err);
+        error: (err: HttpErrorResponse) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail:
+              err?.error?.message ||
+              'Error in registeration. Please try again later!',
+          });
         },
       });
   }

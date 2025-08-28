@@ -1,5 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CartService } from '../../services/cart.service';
@@ -113,11 +117,12 @@ export class HomepageComponent implements OnInit {
           this.totalProducts -= 1;
           this.cartService.removeFromCart(product.id);
         },
-        error: (err: { message: string }) => {
+        error: (err: HttpErrorResponse) => {
+          console.log(err);
           this.messageService.add({
             severity: 'error',
             summary: 'Error',
-            detail: err.message,
+            detail: err.error.message,
           });
         },
       });
