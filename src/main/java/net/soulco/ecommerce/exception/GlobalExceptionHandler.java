@@ -19,6 +19,7 @@ public class GlobalExceptionHandler{
         Map<String, Object> body =new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("Status", HttpStatus.CONFLICT.value());
+        body.put("field",e.getField());
         body.put("error", "Duplicate Entry");
         body.put("message",e.getMessage());
         return new ResponseEntity<>(body,HttpStatus.CONFLICT);

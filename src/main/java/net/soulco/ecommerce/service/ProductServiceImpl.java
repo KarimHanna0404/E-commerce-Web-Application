@@ -33,11 +33,11 @@ public class ProductServiceImpl implements ProductService {
         product.setUser(userMapper.dtoToEntity(userDto));
         String username = product.getUser().getUsername();
         if (!productRepository.findAllByUsernameAndName(username ,product.getName()).isEmpty()) {
-           throw new DuplicateException("Item with that name already exists");
+           throw new DuplicateException("name","Item with that name already exists");
         }
 
         else if (productRepository.findProductByCode(product.getCode())!=null){
-            throw new DuplicateException("Item with that Code already exists");
+            throw new DuplicateException("code","Item with that Code already exists");
 
         }
 

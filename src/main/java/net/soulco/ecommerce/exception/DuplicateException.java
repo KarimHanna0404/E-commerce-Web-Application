@@ -1,7 +1,12 @@
 package net.soulco.ecommerce.exception;
 
 public class DuplicateException extends RuntimeException {
-    public DuplicateException(String message) {
+    private String field;
+    public DuplicateException(String message, String field ) {
         super(message);
+        this.field=field;
+    }
+    public String getField(){
+        return field;
     }
 }
