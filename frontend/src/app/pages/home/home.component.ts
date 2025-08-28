@@ -84,21 +84,24 @@ export class HomepageComponent implements OnInit {
       params = params.set('query', this.searchText);
     }
 
-    this.http
-      .get<Product[]>(`http://localhost:8080/api/products/search`, {
-        params,
-        withCredentials: true,
-      })
-      .subscribe((data) => {
-        this.products = data.map((p) => ({
-          ...p,
-          safeDescription: this.sanitizer.bypassSecurityTrustHtml(
-            p.description
-          ),
-        }));
+// home.component.ts (only the changed part in searchProducts())
 
-        this.searchedProducts = this.products.length;
-      });
+this.http
+  .get<Product[]>(`http://localhost:8080/api/products/search`, {
+    params,
+    withCredentials: true,
+  })
+  .subscribe((data) => {
+    this.products = data.map((p) => ({
+      ...p,
+      safeDescription: this.sanitizer.bypassSecurityTrustHtml(p.description),
+    }));
+
+    this.searchedProducts = this.products.length;
+
+    this.cartService.syncWithProducts(this.products);
+  });
+
   }
 
   onEdit(id: number): void {
