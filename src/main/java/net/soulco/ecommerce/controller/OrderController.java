@@ -21,7 +21,6 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    // TODO: USE HttpSession NOT userId
     @GetMapping
     public List<OrderDto> getOrdersByUser(HttpSession session) {
         UserDto loggedUser = (UserDto) session.getAttribute("userData");
@@ -30,11 +29,6 @@ public class OrderController {
         }
         return orderService.getOrdersByUserId(loggedUser.getId());
     }
-
-    // TODO: CREATE ORDER create(@RequestBody OrderDto order) => GENERATE IDENTIFIER UUID
-
-
-
 
     @PostMapping
     public ResponseEntity<OrderDto> create(@Valid @RequestBody CreateOrderRequest request, HttpSession session) {
@@ -46,6 +40,4 @@ public class OrderController {
         OrderDto created = orderService.createOrder(loggedUser.getId(), request);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
-
-
 }

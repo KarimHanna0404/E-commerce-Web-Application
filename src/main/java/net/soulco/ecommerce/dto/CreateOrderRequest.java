@@ -3,11 +3,9 @@ package net.soulco.ecommerce.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public record CreateOrderRequest(
-        @NotNull @Positive BigDecimal totalAmount,
         @NotNull List<Item> items
 ) {
     // Nested record to represent each order line

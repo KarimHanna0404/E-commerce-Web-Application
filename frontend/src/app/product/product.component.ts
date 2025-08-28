@@ -3,13 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { FileUploadHandlerEvent } from 'primeng/fileupload';
 import { FileUpload } from 'primeng/fileupload';
-import{Product}from '../models/product.model';
+import { Product } from '../models/product.model';
 import { ProductService } from '../services/product.service';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-
-
 
 @Component({
   selector: 'app-create-product',
@@ -24,12 +22,10 @@ export class CreateProductComponent implements OnInit {
   errorMessage: string | null = null;
   products: Product[] = [];
   selectedImageBase64: string | null = null;
-  productId: number | null = null; 
+  productId: number | null = null;
   isEditMode: boolean = false;
 
-
-
-constructor(
+  constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private messageService: MessageService,
@@ -54,7 +50,7 @@ constructor(
     }
   }
 
-    private loadProduct(id: number): void {
+  private loadProduct(id: number): void {
     this.productService.getProductById(id).subscribe({
       next: (product) => {
         this.productForm.patchValue({
@@ -64,7 +60,7 @@ constructor(
           description: product.description,
           imageUrl: product.image,
         });
-        this.selectedImageBase64 = product.image; 
+        this.selectedImageBase64 = product.image;
       },
       error: () => {
         this.messageService.add({
@@ -138,6 +134,4 @@ constructor(
     this.productForm.reset();
     this.errorMessage = null;
   }
-
-
 }

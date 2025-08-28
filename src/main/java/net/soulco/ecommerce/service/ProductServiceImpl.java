@@ -7,6 +7,7 @@ import net.soulco.ecommerce.dto.UserDto;
 import net.soulco.ecommerce.mapper.ProductMapper;
 import net.soulco.ecommerce.mapper.UserMapper;
 import net.soulco.ecommerce.model.Product;
+import net.soulco.ecommerce.repo.OrderItemRepository;
 import net.soulco.ecommerce.repo.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final UserMapper userMapper;
+    private final OrderItemRepository orderItemRepository;
 
     @Override
     public ProductDto createProduct(ProductDto dto, UserDto userDto) {
@@ -36,15 +38,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    // TODO: PRODUCT IS ONLY EDITABLE BY ITS OWN USER
     @Override
     public ProductDto updateProduct(Long id, ProductDto dto, String username) {
         Product product = productRepository.findByIdAndUsername(id,username)
                 .orElseThrow(() -> new RuntimeException("Product not found or not owned by user"));
-
         productMapper.update(dto, product);
         Product updated = productRepository.save(product);
-
         return productMapper.entityToDto(updated);
     }
 
@@ -55,6 +54,9 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long id, String username) {
         Product product = productRepository.findByIdAndUsername(id, username)
                 .orElseThrow(() -> new RuntimeException("Product not found or not owned by user"));
+        if(orderItemRepository.existsByProduct_Id(product.getId())) {
+            throw new RuntimeException("Product cannot be deleted cause it was already ordered by user");
+        }
         productRepository.delete(product);
     }
 

@@ -2,10 +2,9 @@
   <!-- Header -->
   <div class="dashboard__header">
     <h1>Product Dashboard</h1>
-<button class="dashboard__add-btn" [routerLink]="'/products/new'">
-  <span class="plus-icon">+</span> Add New Product
-</button>
-
+    <button class="dashboard__add-btn" [routerLink]="'/products/new'">
+      <span class="plus-icon">+</span> Add New Product
+    </button>
   </div>
 
   <input
@@ -37,7 +36,11 @@
     <div class="products-grid">
       <p-card *ngFor="let product of products" class="product-card">
         <ng-template #header>
-          <img [src]="product.imageUrl" alt="{{ product.name }}" class="product-img" />
+          <img
+            [src]="product.imageUrl"
+            alt="{{ product.name }}"
+            class="product-img"
+          />
         </ng-template>
 
         <ng-template #title>
@@ -48,7 +51,10 @@
           <span class="product-code">#{{ product.code }}</span>
         </ng-template>
 
-        <p class="product-description" [innerHTML]="product.safeDescription"></p>
+        <p
+          class="product-description"
+          [innerHTML]="product.safeDescription"
+        ></p>
 
         <p class="product-price">${{ product.price }}</p>
 
@@ -62,10 +68,11 @@
               <i class="pi pi-pencil text-blue-500 text-2xl cursor-pointer"></i>
             </button>
 
-<button (click)="addToCart(product)">
-  <i class="pi pi-cart-plus text-green-500 text-2xl cursor-pointer"></i>
-</button>
-
+            <button (click)="addToCart(product)">
+              <i
+                class="pi pi-cart-plus text-green-500 text-2xl cursor-pointer"
+              ></i>
+            </button>
           </div>
         </ng-template>
       </p-card>

@@ -31,8 +31,7 @@
         </p-floatlabel>
         <p-message
           *ngIf="
-            productForm.get('code')?.invalid &&
-            productForm.get('code')?.touched
+            productForm.get('code')?.invalid && productForm.get('code')?.touched
           "
           severity="error"
           variant="simple"
@@ -112,5 +111,4 @@
   </form>
 
   <p-toast />
-
 </div>

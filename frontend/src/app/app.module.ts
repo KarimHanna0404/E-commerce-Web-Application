@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { NgModule, provideZoneChangeDetection } from '@angular/core';
-import { ReactiveFormsModule ,FormsModule} from '@angular/forms';
-import { provideRouter, RouterModule, RouterOutlet,RouterLink } from '@angular/router';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import {
+  provideRouter,
+  RouterModule,
+  RouterOutlet,
+  RouterLink,
+} from '@angular/router';
 import { routes } from './app.routes';
 import { LoginComponent } from './login/login.component';
 import { RegistrationComponent } from './registration/registration.component';
@@ -36,13 +41,6 @@ import { CartComponent } from './cart/cart.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { OrderComponent } from './order/order.component';
 import { OrderService } from './services/order.service';
-
-
-
-
-
-
-
 
 @NgModule({
   imports: [
@@ -81,8 +79,6 @@ import { OrderService } from './services/order.service';
     HomepageComponent,
     CartComponent,
     OrderComponent,
-    
-
   ],
   providers: [
     MessageService,
@@ -99,9 +95,8 @@ import { OrderService } from './services/order.service';
         },
       },
     }),
-
   ],
-  bootstrap: [AppComponent,OrderService],
+  bootstrap: [AppComponent, OrderService],
 })
 export class AppModule {
   constructor() {}

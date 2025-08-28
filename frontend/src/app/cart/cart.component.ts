@@ -7,7 +7,7 @@ import { CartService, CartItem } from '../services/cart.service';
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class CartComponent implements OnInit {
   cart: CartItem[] = [];
@@ -20,7 +20,7 @@ export class CartComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.cartService.cartItems$.subscribe(items => {
+    this.cartService.cartItems$.subscribe((items) => {
       this.cart = items;
       this.total = this.cartService.getTotal();
     });
@@ -34,28 +34,30 @@ export class CartComponent implements OnInit {
     this.cartService.removeFromCart(item.id);
   }
 
-checkout() {
-  if (this.cart.length === 0) return;
+  checkout() {
+    if (this.cart.length === 0) return;
 
-  const orderRequest = {
-    totalAmount: this.total,
-    items: this.cart.map(item => ({
-      productId: item.id, 
-      quantity: item.quantity
-    }))
-  };
+    const orderRequest = {
+      totalAmount: this.total,
+      items: this.cart.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+      })),
+    };
 
-  this.http.post('http://localhost:8080/api/orders', orderRequest, { withCredentials: true })
-    .subscribe({
-      next: (createdOrder: any) => {
-        this.cartService.clearCart();
-        this.router.navigate(['/orders']);
-      },
-      error: (err) => {
-        console.error('Failed to create order', err);
-        alert('Failed to create order. Please try again.');
-      }
-    });
-}
-
+    this.http
+      .post('http://localhost:8080/api/orders', orderRequest, {
+        withCredentials: true,
+      })
+      .subscribe({
+        next: (createdOrder: any) => {
+          this.cartService.clearCart();
+          this.router.navigate(['/orders']);
+        },
+        error: (err) => {
+          console.error('Failed to create order', err);
+          alert('Failed to create order. Please try again.');
+        },
+      });
+  }
 }

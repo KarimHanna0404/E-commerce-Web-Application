@@ -35,7 +35,6 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.entitiesToDtos(orders);
     }
 
-
     //creating the order and giving each order a unique uuid identifier
     @Override
     public OrderDto createOrder(Long userId, CreateOrderRequest request) {
@@ -46,27 +45,21 @@ public class OrderServiceImpl implements OrderService {
         order.setUser(user);
         order.setIdentifier(UUID.randomUUID().toString());
         order.setOrderDate(LocalDateTime.now());
-        order.setTotalAmount(request.totalAmount());
 
         List<OrderItem> orderItems = new ArrayList<>();
-        List<CreateOrderRequest.Item> items = request.items();
-        for(int i =0; i< items.size(); i++){
-            CreateOrderRequest.Item item = items.get(i);
-
-            Product product = productRepository.findById(item.productId()).orElseThrow(()->new RuntimeException("Product not found"));
-
+        for (CreateOrderRequest.Item item : request.items()) {
+            Product product = productRepository.findById(item.productId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
             OrderItem orderItem = new OrderItem();
             orderItem.setProduct(product);
             orderItem.setQuantity(item.quantity());
-            orderItem.setTotalAmount(product.getPrice().multiply(BigDecimal.valueOf(item.quantity()))
-            );
-
+            orderItem.setTotalAmount(product.getPrice().multiply(BigDecimal.valueOf(item.quantity())));
             orderItem.setOrder(order);
             orderItems.add(orderItem);
-
-
         }
 
+        order.setTotalAmount(orderItems.stream().map(OrderItem::getTotalAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add));
         order.setOrderItems(orderItems);
 
         Order savedOrder = orderRepo.save(order);

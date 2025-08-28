@@ -6,7 +6,7 @@ export interface CartItem {
   name: string;
   price: number;
   quantity: number;
-  image?: string; 
+  image?: string;
 }
 
 @Injectable({
@@ -22,40 +22,39 @@ export class CartService {
   cartItems$ = this.cartItems.asObservable();
 
   constructor() {
-    this.loadCart(); 
+    this.loadCart();
   }
 
-addToCart(
-  product: { id: number; name: string; price: number; imageUrl?: string },
-  quantity: number = 1
-): boolean {
-  if (quantity <= 0) return false;
+  addToCart(
+    product: { id: number; name: string; price: number; imageUrl?: string },
+    quantity: number = 1
+  ): boolean {
+    if (quantity <= 0) return false;
 
-  const index = this.cart.findIndex(i => i.id === product.id);
+    const index = this.cart.findIndex((i) => i.id === product.id);
 
-  if (index > -1) {
-    if (this.cart[index].quantity + quantity > 100) {
-      // cap at 100
-      this.cart[index].quantity = 100;
-      this.updateCartState();
-      return false; // signal "not added"
+    if (index > -1) {
+      if (this.cart[index].quantity + quantity > 100) {
+        // cap at 100
+        this.cart[index].quantity = 100;
+        this.updateCartState();
+        return false; // signal "not added"
+      } else {
+        this.cart[index].quantity += quantity;
+      }
     } else {
-      this.cart[index].quantity += quantity;
+      this.cart.push({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.imageUrl,
+        quantity: quantity > 100 ? 100 : quantity,
+      });
     }
-  } else {
-    this.cart.push({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.imageUrl,
-      quantity: quantity > 100 ? 100 : quantity
-    });
+
+    this.updateCartState();
+    return true;
   }
-
-  this.updateCartState();
-  return true; 
-}
-
 
   removeFromCart(productId: number) {
     this.cart = this.cart.filter((item) => item.id !== productId);
@@ -86,13 +85,11 @@ addToCart(
   private updateCartState() {
     this.cartCount.next(this.getCount());
     this.cartItems.next([...this.cart]);
-    this.saveCart(); 
+    this.saveCart();
   }
 
   private getCount(): number {
     return this.cart.reduce((sum, item) => sum + item.quantity, 0);
-
-
   }
 
   private saveCart() {

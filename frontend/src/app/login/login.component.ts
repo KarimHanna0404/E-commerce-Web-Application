@@ -8,7 +8,7 @@ import { catchError, throwError } from 'rxjs';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  standalone: false
+  standalone: false,
 })
 export class LoginComponent {
   fb = inject(FormBuilder);

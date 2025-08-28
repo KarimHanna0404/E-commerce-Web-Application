@@ -1,12 +1,20 @@
 <div class="search-bar">
   <div class="input-group">
     <label for="orderNumber">Order #</label>
-    <input id="orderNumber" [(ngModel)]="searchOrderNumber" placeholder="Search by Order Number" />
+    <input
+      id="orderNumber"
+      [(ngModel)]="searchOrderNumber"
+      placeholder="Search by Order Number"
+    />
   </div>
 
   <div class="input-group">
     <label for="productName">Product</label>
-    <input id="productName" [(ngModel)]="searchProductName" placeholder="Search by Product Name" />
+    <input
+      id="productName"
+      [(ngModel)]="searchProductName"
+      placeholder="Search by Product Name"
+    />
   </div>
 
   <div class="input-group">
@@ -35,10 +43,10 @@
   <tbody>
     <tr *ngFor="let order of filteredOrders">
       <td>{{ order.identifier }}</td>
-      <td>{{ order.orderDate | date: 'short' }}</td>
+      <td>{{ order.orderDate | date : "short" }}</td>
       <td>{{ order.totalAmount | currency }}</td>
       <td>
-        <ul style="margin:0; padding-left:15px;">
+        <ul style="margin: 0; padding-left: 15px">
           <li *ngFor="let item of order.itemDetails">{{ item }}</li>
         </ul>
       </td>
@@ -47,5 +55,5 @@
 </table>
 
 <ng-template #noOrders>
-  <p style="text-align:center; margin-top:20px;">No orders found.</p>
+  <p style="text-align: center; margin-top: 20px">No orders found.</p>
 </ng-template>

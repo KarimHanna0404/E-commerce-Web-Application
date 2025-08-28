@@ -2,7 +2,6 @@
 
 @import "primeicons/primeicons.css";
 
-
 $primary-color: #6366f1;
 $primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
 $background-color: #f8fafc;
@@ -41,8 +40,6 @@ $shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, sans-serif;
 
-
-
   &__header {
     display: flex;
     justify-content: space-between;
@@ -58,28 +55,28 @@ $shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
   }
 
   &__add-btn {
-  background: $primary-gradient;   /* keep the purple gradient */
-  color: white;
-  border: none;
-  padding: 0.875rem 1.5rem;
-  border-radius: 6px;   /* ⬅️ same shape as Logout (not 50px pill) */
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  box-shadow: 0 4px 15px rgba($primary-color, 0.3);
-  @include button-hover;
+    background: $primary-gradient; /* keep the purple gradient */
+    color: white;
+    border: none;
+    padding: 0.875rem 1.5rem;
+    border-radius: 6px; /* ⬅️ same shape as Logout (not 50px pill) */
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 15px rgba($primary-color, 0.3);
+    @include button-hover;
 
-  &:hover {
-    box-shadow: 0 6px 20px rgba($primary-color, 0.4);
-  }
+    &:hover {
+      box-shadow: 0 6px 20px rgba($primary-color, 0.4);
+    }
 
-  .plus-icon {
-    font-size: 1.2rem;
-    font-weight: bold;
-  }
+    .plus-icon {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
   }
 
   &__stats {
@@ -123,56 +120,55 @@ $shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
   }
   .products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.product-card {
-  border-radius: 1rem;
-  overflow: hidden;
-  background: $card-background;
-  box-shadow: $shadow-light;
-  border: 1px solid $border-light;
-  @include card-hover;
-
-  .p-card-body {
-    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
   }
-}
 
-.product-img {
-  width: 100%;
-  height: 180px; 
-  object-fit: cover;
-  display: block;
-}
+  .product-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    background: $card-background;
+    box-shadow: $shadow-light;
+    border: 1px solid $border-light;
+    @include card-hover;
 
-.product-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: $text-primary;
-}
+    .p-card-body {
+      padding: 1.5rem;
+    }
+  }
 
-.product-code {
-  color: $text-secondary;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-  display: block;
-}
+  .product-img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+  }
 
-.product-description {
-  color: $text-secondary;
-  font-size: 0.95rem;
-  margin: 0.5rem 0 1rem;
-}
+  .product-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: $text-primary;
+  }
 
-.product-price {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: $primary-color;
-}
+  .product-code {
+    color: $text-secondary;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
 
+  .product-description {
+    color: $text-secondary;
+    font-size: 0.95rem;
+    margin: 0.5rem 0 1rem;
+  }
+
+  .product-price {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $primary-color;
+  }
 }
 
 .stat-card {
@@ -198,7 +194,6 @@ $shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.1);
     font-weight: 500;
     margin: 0;
   }
-  
 
   &--electronics {
     .stat-card__number {

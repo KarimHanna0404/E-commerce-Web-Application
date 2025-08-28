@@ -5,8 +5,6 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { CartService } from '../../services/cart.service';
 import { MessageService } from 'primeng/api';
 
-
-
 interface Product {
   id: number;
   name: string;
@@ -14,7 +12,7 @@ interface Product {
   description: string;
   price: number;
   code: string;
-  safeDescription?: SafeHtml; 
+  safeDescription?: SafeHtml;
 }
 
 @Component({
@@ -37,28 +35,25 @@ export class HomepageComponent implements OnInit {
     private messageService: MessageService
   ) {}
 
-addToCart(product: Product) {
-  const added = this.cartService.addToCart(product, 1);
+  addToCart(product: Product) {
+    const added = this.cartService.addToCart(product, 1);
 
-  if (added) {
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Added to Cart',
-      detail: `${product.name} has been added to your cart.`,
-      life: 3000
-    });
-  } else {
-    this.messageService.add({
-      severity: 'warn', 
-      summary: 'Limit Reached',
-      detail: `${product.name} already reached the max limit (100).`,
-      life: 3000
-    });
+    if (added) {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Added to Cart',
+        detail: `${product.name} has been added to your cart.`,
+        life: 3000,
+      });
+    } else {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Limit Reached',
+        detail: `${product.name} already reached the max limit (100).`,
+        life: 3000,
+      });
+    }
   }
-}
-
-
-
 
   ngOnInit(): void {
     this.getAllProductsCount();
@@ -86,14 +81,16 @@ addToCart(product: Product) {
     }
 
     this.http
-      .get<Product[]>(
-        `http://localhost:8080/api/products/search`,
-        { params, withCredentials: true }
-      )
+      .get<Product[]>(`http://localhost:8080/api/products/search`, {
+        params,
+        withCredentials: true,
+      })
       .subscribe((data) => {
         this.products = data.map((p) => ({
           ...p,
-          safeDescription: this.sanitizer.bypassSecurityTrustHtml(p.description),
+          safeDescription: this.sanitizer.bypassSecurityTrustHtml(
+            p.description
+          ),
         }));
 
         this.searchedProducts = this.products.length;
@@ -109,11 +106,20 @@ addToCart(product: Product) {
       .delete(`http://localhost:8080/api/products/${product.id}`, {
         withCredentials: true,
       })
-      .subscribe(() => {
-        this.products = this.products.filter((p) => p.id !== product.id);
-        this.searchedProducts = this.products.length;
-        this.totalProducts -= 1;
-        this.cartService.removeFromCart(product.id);
+      .subscribe({
+        next: () => {
+          this.products = this.products.filter((p) => p.id !== product.id);
+          this.searchedProducts = this.products.length;
+          this.totalProducts -= 1;
+          this.cartService.removeFromCart(product.id);
+        },
+        error: (err: { message: string }) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.message,
+          });
+        },
       });
   }
 }
