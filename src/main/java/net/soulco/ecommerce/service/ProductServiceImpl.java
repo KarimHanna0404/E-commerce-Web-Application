@@ -4,9 +4,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import net.soulco.ecommerce.dto.ProductDto;
 import net.soulco.ecommerce.dto.UserDto;
+import net.soulco.ecommerce.exception.DuplicateException;
 import net.soulco.ecommerce.mapper.ProductMapper;
 import net.soulco.ecommerce.mapper.UserMapper;
 import net.soulco.ecommerce.model.Product;
+import net.soulco.ecommerce.model.User;
 import net.soulco.ecommerce.repo.OrderItemRepository;
 import net.soulco.ecommerce.repo.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -25,10 +27,24 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto createProduct(ProductDto dto, UserDto userDto) {
         // TODO: CHECK IF PRODUCT EXISTS THEN THROW CLEAR MESSAGE TO USER
+
+
         Product product = productMapper.dtoToEntity(dto);
         product.setUser(userMapper.dtoToEntity(userDto));
-        Product saved = productRepository.save(product);
-        return productMapper.entityToDto(saved);
+        String username = product.getUser().getUsername();
+        if (!productRepository.findAllByUsernameAndName(username ,product.getName()).isEmpty()) {
+           throw new DuplicateException("Item with that name already exists");
+        }
+
+        else if (productRepository.findProductByCode(product.getCode())!=null){
+            throw new DuplicateException("Item with that Code already exists");
+
+        }
+
+else {
+            Product saved = productRepository.save(product);
+            return productMapper.entityToDto(saved);
+        }
     }
 
     @Override
