@@ -15,5 +15,6 @@ public class OrderItemDto {
     // TODO: Better Approach To Use ProductDto
     private ProductDto productDto;
     private Integer quantity;
+    private BigDecimal priceAtPurchase;
     private BigDecimal totalAmount;
 }

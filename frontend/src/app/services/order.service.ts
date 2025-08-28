@@ -11,6 +11,7 @@ export interface Product {
 export interface OrderItem {
   productDto: Product;
   quantity: number;
+  priceAtPurchase: number;
   totalAmount: number;
 }
 

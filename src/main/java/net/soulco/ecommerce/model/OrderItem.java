@@ -8,7 +8,8 @@ import java.math.BigDecimal;
 @Table(name = "order_item")
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class OrderItem {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -21,6 +22,9 @@ public class OrderItem {
 
     @Column(nullable = false)
     private Integer quantity;
+
+    @Column(name = "price_at_purchase", nullable = false, precision = 10, scale = 2)
+    private BigDecimal priceAtPurchase;
 
     @Column(name = "total_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;

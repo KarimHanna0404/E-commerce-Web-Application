@@ -45,11 +45,16 @@
       <td>{{ order.identifier }}</td>
       <td>{{ order.orderDate | date : "short" }}</td>
       <td>{{ order.totalAmount | currency }}</td>
-      <td>
-        <ul style="margin: 0; padding-left: 15px">
-          <li *ngFor="let item of order.itemDetails">{{ item }}</li>
-        </ul>
-      </td>
+<td>
+  <ul style="margin: 0; padding-left: 15px">
+<li *ngFor="let item of order.orderItems">
+  {{ item.productDto.name }} - {{ item.priceAtPurchase | currency }} × {{ item.quantity }}
+</li>
+
+  </ul>
+</td>
+
+
     </tr>
   </tbody>
 </table>

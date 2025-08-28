@@ -18,6 +18,7 @@ public interface OrderMapper {
     List<OrderDto> entitiesToDtos(List<Order> orders);
 
     @Mapping(target = "productDto", source = "product")
+    @Mapping(target = "priceAtPurchase", source = "priceAtPurchase")
     OrderItemDto entityToDto(OrderItem orderItem);
 }
 
