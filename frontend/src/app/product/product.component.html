@@ -17,6 +17,13 @@
         productForm.get('name')?.touched){
         <p-message severity="error" variant="simple">*name required</p-message>
         }
+        <p-message
+  *ngIf="errorMessageName"
+  severity="error"
+  variant="simple"
+>
+  {{ errorMessageName }}
+</p-message>
       </div>
       <div class="w-full">
         <p-floatlabel>
@@ -38,8 +45,18 @@
         >
           *Invalid code
         </p-message>
+
+ <p-message
+  *ngIf="errorMessageCode"
+  severity="error"
+  variant="simple"
+>
+  {{ errorMessageCode }}
+</p-message>
+
       </div>
     </div>
+   
 
     <p-inputnumber
       formControlName="price"

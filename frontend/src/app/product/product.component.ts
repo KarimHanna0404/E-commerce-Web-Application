@@ -96,6 +96,9 @@ export class CreateProductComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
+  errorMessageCode : String ='';
+  errorMessageName: String ='';
+
   async onSubmit(): Promise<void> {
     if (this.productForm.invalid) {
       this.productForm.markAllAsTouched();
@@ -103,6 +106,7 @@ export class CreateProductComponent implements OnInit {
     }
 
     const payload = this.productForm.value;
+
 
     try {
       if (this.isEditMode && this.productId) {
@@ -121,13 +125,35 @@ export class CreateProductComponent implements OnInit {
         });
       }
 
+   
+
+    
+  
+      
+
       this.router.navigate(['/homepage']);
-    } catch (error) {
+
+    } catch (err: any) {
+  if(err.status===409 && err.error?.field){
+     if(err.error.field==='code'){
+      this.errorMessageCode=err.error.message;
+      this.errorMessageName='';
+     } else if(err.error.field==='name'){
+      this.errorMessageName=err.error.message;
+      this.errorMessageCode='';
+      }
+      console.log('Error Response:', err);
+    }
+
+      else{
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
         detail: 'Error saving product.',
+
       });
+
+      }
     }
   }
   onCancel(): void {
