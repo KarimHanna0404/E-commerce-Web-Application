@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { MenuItem } from 'primeng/api';
@@ -15,8 +16,7 @@ export class AppComponent implements OnInit {
   title = 'frontend';
   model: MenuItem[] = [];
   cartCount = 0;
-
-  constructor(private cartService: CartService, private router: Router) {}
+  constructor(private cartService: CartService, private router: Router, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.cartService.cartCount$.subscribe((count) => {
@@ -52,9 +52,18 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    sessionStorage.clear();
-    localStorage.clear();
-
-    this.router.navigate(['/login']);
+    this.http.post<void>('http://localhost:8080/api/auth/logout', {}, { withCredentials: true })
+      .subscribe({
+        next: () => {
+          sessionStorage.clear();
+          localStorage.clear();
+          this.router.navigate(['/login']);
+        },
+        error: () => {
+          sessionStorage.clear();
+          localStorage.clear();
+          this.router.navigate(['/login']);
+        }
+      });
   }
 }

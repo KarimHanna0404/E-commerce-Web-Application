@@ -50,9 +50,9 @@ public class UserController {
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping(value = "/logout", produces = "application/json")
-    public ResponseEntity<ApiMessage> logout(HttpSession session) {
-        userService.DeleteSession(session);
-        return ResponseEntity.ok(new ApiMessage("Logged out"));
-    }
+//    @PostMapping(value = "/logout", produces = "application/json")
+//    public ResponseEntity<ApiMessage> logout(HttpSession session) {
+//        userService.DeleteSession(session);
+//        return ResponseEntity.ok(new ApiMessage("Logged out"));
+//    }
 }

@@ -30,17 +30,22 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-                )
-
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/auth/logout").permitAll()
                         .requestMatchers("/api/user/**").permitAll()
                         .anyRequest().permitAll()
                 )
-
                 .formLogin(AbstractHttpConfigurer::disable)
+
+                // ✅ Spring Security logout
+                .logout(l -> l
+                        .logoutUrl("/api/auth/logout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .logoutSuccessHandler((req, res, auth) -> res.setStatus(204)) // 204 No Content
+                )
+
                 .build();
     }
 }
