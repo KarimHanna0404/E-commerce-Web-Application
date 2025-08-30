@@ -47,10 +47,3 @@ The project demonstrates secure user authentication, product management, and ord
 - Git & GitHub for version control
 
 ---
-
-## 📸 Screenshots
-(Add some screenshots of your login page, product page, and order/cart page here.)
-
----
-
-## 📂 Project Structure
